@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
@@ -34,49 +33,58 @@ export default function LoginPage() {
   }
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl">FitCoach AI</CardTitle>
-        <CardDescription>Sign in to your account</CardDescription>
-      </CardHeader>
-      <form onSubmit={handleLogin}>
-        <CardContent className="space-y-4">
-          {error && (
-            <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-md">{error}</p>
-          )}
-          <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+    <div>
+      <h2 className="text-2xl font-bold text-gray-900 mb-1">Welcome back</h2>
+      <p className="text-gray-500 mb-8">Sign in to your FitCoach AI account</p>
+
+      <form onSubmit={handleLogin} className="space-y-5">
+        {error && (
+          <div className="text-sm text-red-600 bg-red-50 border border-red-100 px-4 py-3 rounded-lg">
+            {error}
           </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-        </CardContent>
-        <CardFooter className="flex flex-col gap-3">
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Signing in…' : 'Sign in'}
-          </Button>
-          <p className="text-sm text-muted-foreground text-center">
-            Don&apos;t have an account?{' '}
-            <Link href="/signup" className="underline text-foreground">Sign up</Link>
-          </p>
-        </CardFooter>
+        )}
+
+        <div className="space-y-1.5">
+          <Label htmlFor="email" className="text-gray-700 font-medium">Email</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="h-11 bg-white"
+            required
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="password" className="text-gray-700 font-medium">Password</Label>
+          <Input
+            id="password"
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="h-11 bg-white"
+            required
+          />
+        </div>
+
+        <Button
+          type="submit"
+          className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-medium"
+          disabled={loading}
+        >
+          {loading ? 'Signing in…' : 'Sign in'}
+        </Button>
       </form>
-    </Card>
+
+      <p className="text-sm text-gray-500 text-center mt-6">
+        Don&apos;t have an account?{' '}
+        <Link href="/signup" className="text-blue-600 font-medium hover:underline">
+          Sign up free
+        </Link>
+      </p>
+    </div>
   )
 }
