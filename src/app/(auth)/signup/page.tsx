@@ -4,8 +4,6 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 
 const ROLES = [
   { value: 'trainer', emoji: '🏋️', label: 'Trainer', desc: 'I coach clients' },
@@ -37,81 +35,93 @@ export default function SignupPage() {
     router.push('/auth/redirect')
   }
 
+  const inputStyle = {
+    display: 'block', width: '100%', height: 48,
+    padding: '0 14px', fontSize: 15,
+    border: '1.5px solid #e5e7eb', borderRadius: 12,
+    background: '#fafafa', color: '#111827',
+    outline: 'none', boxSizing: 'border-box' as const,
+    marginTop: 6,
+  }
+
   return (
     <div>
-      <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">Get started</h2>
-      <p className="text-gray-500 mt-2 mb-8 text-sm">Create your FitCoach AI account</p>
+      <h2 style={{ fontSize: 30, fontWeight: 800, color: '#111827', margin: '0 0 6px' }}>Get started</h2>
+      <p style={{ color: '#6b7280', fontSize: 15, margin: '0 0 28px' }}>Create your FitCoach AI account</p>
 
-      <form onSubmit={handleSignup} className="space-y-4">
+      <form onSubmit={handleSignup}>
         {error && (
-          <div className="text-sm text-red-700 bg-red-50 border border-red-200 px-4 py-3 rounded-xl">
-            {error}
-          </div>
+          <div style={{
+            background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 10,
+            padding: '12px 16px', fontSize: 14, color: '#dc2626', marginBottom: 20,
+          }}>{error}</div>
         )}
 
         {/* Role selector */}
-        <div>
-          <p className="text-sm font-semibold text-gray-700 mb-2">I am a…</p>
-          <div className="grid grid-cols-2 gap-3">
+        <div style={{ marginBottom: 20 }}>
+          <p style={{ fontSize: 14, fontWeight: 600, color: '#374151', marginBottom: 10 }}>I am a…</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             {ROLES.map((r) => (
               <button
                 key={r.value} type="button" onClick={() => setRole(r.value)}
-                className="p-4 rounded-xl border-2 text-left transition-all"
                 style={{
-                  borderColor: role === r.value ? 'var(--brand)' : '#e5e7eb',
-                  background: role === r.value ? 'var(--brand-light)' : 'white',
+                  padding: '14px 16px', borderRadius: 12, textAlign: 'left',
+                  border: `2px solid ${role === r.value ? '#EAB308' : '#e5e7eb'}`,
+                  background: role === r.value ? '#fefce8' : '#fafafa',
+                  cursor: 'pointer',
                 }}
               >
-                <span className="text-xl">{r.emoji}</span>
-                <p className="text-sm font-bold text-gray-900 mt-1">{r.label}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{r.desc}</p>
+                <div style={{ fontSize: 20 }}>{r.emoji}</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#111827', marginTop: 6 }}>{r.label}</div>
+                <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 2 }}>{r.desc}</div>
               </button>
             ))}
           </div>
         </div>
 
-        <div className="space-y-1.5">
-          <Label htmlFor="fullName" className="text-sm font-semibold text-gray-700">Full name</Label>
-          <Input
-            id="fullName" placeholder="Alex Johnson"
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#374151' }}>Full name</label>
+          <input
+            placeholder="Alex Johnson" required
             value={fullName} onChange={(e) => setFullName(e.target.value)}
-            className="h-12 rounded-xl bg-white border-gray-200 text-gray-900 placeholder:text-gray-400 focus-visible:ring-blue-500"
-            required
+            style={inputStyle}
           />
         </div>
 
-        <div className="space-y-1.5">
-          <Label htmlFor="email" className="text-sm font-semibold text-gray-700">Email</Label>
-          <Input
-            id="email" type="email" placeholder="you@example.com"
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#374151' }}>Email</label>
+          <input
+            type="email" placeholder="you@example.com" required
             value={email} onChange={(e) => setEmail(e.target.value)}
-            className="h-12 rounded-xl bg-white border-gray-200 text-gray-900 placeholder:text-gray-400 focus-visible:ring-blue-500"
-            required
+            style={inputStyle}
           />
         </div>
 
-        <div className="space-y-1.5">
-          <Label htmlFor="password" className="text-sm font-semibold text-gray-700">Password</Label>
-          <Input
-            id="password" type="password" placeholder="Min. 8 characters"
+        <div style={{ marginBottom: 24 }}>
+          <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#374151' }}>Password</label>
+          <input
+            type="password" placeholder="Min. 8 characters" minLength={8} required
             value={password} onChange={(e) => setPassword(e.target.value)}
-            className="h-12 rounded-xl bg-white border-gray-200 text-gray-900 focus-visible:ring-blue-500"
-            minLength={8} required
+            style={inputStyle}
           />
         </div>
 
         <button
           type="submit" disabled={loading}
-          className="w-full h-12 rounded-xl font-semibold text-white text-sm mt-2 transition-opacity disabled:opacity-60"
-          style={{ background: loading ? '#93c5fd' : 'var(--brand)' }}
+          style={{
+            display: 'block', width: '100%', height: 50,
+            background: loading ? '#fde68a' : '#EAB308',
+            color: '#000', fontWeight: 700, fontSize: 15,
+            border: 'none', borderRadius: 12, cursor: loading ? 'not-allowed' : 'pointer',
+          }}
         >
           {loading ? 'Creating account…' : 'Create account →'}
         </button>
       </form>
 
-      <p className="text-sm text-gray-500 text-center mt-6">
+      <p style={{ textAlign: 'center', fontSize: 14, color: '#6b7280', marginTop: 24 }}>
         Already have an account?{' '}
-        <Link href="/login" className="font-semibold" style={{ color: 'var(--brand)' }}>
+        <Link href="/login" style={{ color: '#EAB308', fontWeight: 700, textDecoration: 'none' }}>
           Sign in
         </Link>
       </p>
