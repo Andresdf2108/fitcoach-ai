@@ -128,3 +128,10 @@
     @apply font-sans;
   }
 }
+
+/* FitCoach AI brand tokens */
+:root {
+  --brand: #2563eb;
+  --brand-dark: #1d4ed8;
+  --brand-light: #eff6ff;
+}

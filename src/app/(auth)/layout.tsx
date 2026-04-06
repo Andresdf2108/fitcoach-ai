@@ -1,50 +1,65 @@
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex">
-      {/* Left panel — brand */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-indigo-700 flex-col justify-between p-12 text-white">
+
+      {/* ── Left: Brand panel ── */}
+      <div
+        className="hidden lg:flex lg:w-[52%] flex-col justify-between p-14 text-white"
+        style={{ background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #3b82f6 100%)' }}
+      >
+        {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-lg font-bold">
-            F
+          <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center font-black text-white text-lg tracking-tight">
+            FC
           </div>
           <span className="text-xl font-bold tracking-tight">FitCoach AI</span>
         </div>
 
-        <div>
-          <h1 className="text-4xl font-bold leading-tight mb-4">
-            Your coaching<br />business, powered<br />by AI.
+        {/* Hero copy */}
+        <div className="space-y-6">
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur rounded-full px-4 py-1.5 text-sm text-blue-100 w-fit">
+            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+            Now in early access
+          </div>
+          <h1 className="text-5xl font-extrabold leading-[1.1] tracking-tight">
+            Your coaching<br />business,<br />
+            <span className="text-blue-200">powered by AI.</span>
           </h1>
-          <p className="text-blue-100 text-lg leading-relaxed max-w-sm">
+          <p className="text-blue-100 text-lg leading-relaxed max-w-xs">
             Manage leads, clients, programs, and check-ins — all in one platform built for serious coaches.
           </p>
         </div>
 
-        <div className="flex gap-6 text-sm text-blue-200">
-          <div>
-            <p className="text-2xl font-bold text-white">3x</p>
-            <p>faster onboarding</p>
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-white">80%</p>
-            <p>less admin work</p>
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-white">AI</p>
-            <p>at every step</p>
-          </div>
+        {/* Social proof */}
+        <div className="grid grid-cols-3 gap-4">
+          {[
+            { stat: '3×', label: 'faster onboarding' },
+            { stat: '80%', label: 'less admin work' },
+            { stat: 'AI', label: 'at every step' },
+          ].map(({ stat, label }) => (
+            <div key={label} className="bg-white/10 backdrop-blur rounded-2xl p-4">
+              <p className="text-2xl font-black text-white">{stat}</p>
+              <p className="text-xs text-blue-200 mt-1 leading-snug">{label}</p>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Right panel — form */}
+      {/* ── Right: Form panel ── */}
       <div className="flex-1 flex items-center justify-center p-8 bg-gray-50">
         <div className="w-full max-w-sm">
+
           {/* Mobile logo */}
-          <div className="flex items-center gap-2 mb-8 lg:hidden">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
-              F
+          <div className="flex items-center gap-2.5 mb-10 lg:hidden">
+            <div
+              className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-white text-sm"
+              style={{ background: 'var(--brand)' }}
+            >
+              FC
             </div>
             <span className="text-lg font-bold text-gray-900">FitCoach AI</span>
           </div>
+
           {children}
         </div>
       </div>

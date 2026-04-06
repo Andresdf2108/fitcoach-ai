@@ -6,11 +6,10 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
 
 const ROLES = [
-  { value: 'trainer', label: 'I am a Trainer', desc: 'I coach and manage clients' },
-  { value: 'trainee', label: 'I am a Trainee', desc: 'I am being coached' },
+  { value: 'trainer', emoji: '🏋️', label: 'Trainer', desc: 'I coach clients' },
+  { value: 'trainee', emoji: '💪', label: 'Trainee', desc: 'I am being coached' },
 ]
 
 export default function SignupPage() {
@@ -26,111 +25,93 @@ export default function SignupPage() {
     e.preventDefault()
     setError('')
     setLoading(true)
-
     const supabase = createClient()
     const { error } = await supabase.auth.signUp({
-      email,
-      password,
+      email, password,
       options: {
         data: { full_name: fullName, role },
         emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     })
-
-    if (error) {
-      setError(error.message)
-      setLoading(false)
-      return
-    }
-
+    if (error) { setError(error.message); setLoading(false); return }
     router.push('/auth/redirect')
   }
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-1">Create your account</h2>
-      <p className="text-gray-500 mb-8">Start your FitCoach AI journey</p>
+      <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">Get started</h2>
+      <p className="text-gray-500 mt-2 mb-8 text-sm">Create your FitCoach AI account</p>
 
-      <form onSubmit={handleSignup} className="space-y-5">
+      <form onSubmit={handleSignup} className="space-y-4">
         {error && (
-          <div className="text-sm text-red-600 bg-red-50 border border-red-100 px-4 py-3 rounded-lg">
+          <div className="text-sm text-red-700 bg-red-50 border border-red-200 px-4 py-3 rounded-xl">
             {error}
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-3">
-          {ROLES.map((r) => (
-            <button
-              key={r.value}
-              type="button"
-              onClick={() => setRole(r.value)}
-              className={`p-3 rounded-xl border-2 text-left transition-all ${
-                role === r.value
-                  ? 'border-blue-600 bg-blue-50'
-                  : 'border-gray-200 bg-white hover:border-gray-300'
-              }`}
-            >
-              <p className={`text-sm font-semibold ${role === r.value ? 'text-blue-700' : 'text-gray-800'}`}>
-                {r.label}
-              </p>
-              <p className={`text-xs mt-0.5 ${role === r.value ? 'text-blue-500' : 'text-gray-400'}`}>
-                {r.desc}
-              </p>
-            </button>
-          ))}
+        {/* Role selector */}
+        <div>
+          <p className="text-sm font-semibold text-gray-700 mb-2">I am a…</p>
+          <div className="grid grid-cols-2 gap-3">
+            {ROLES.map((r) => (
+              <button
+                key={r.value} type="button" onClick={() => setRole(r.value)}
+                className="p-4 rounded-xl border-2 text-left transition-all"
+                style={{
+                  borderColor: role === r.value ? 'var(--brand)' : '#e5e7eb',
+                  background: role === r.value ? 'var(--brand-light)' : 'white',
+                }}
+              >
+                <span className="text-xl">{r.emoji}</span>
+                <p className="text-sm font-bold text-gray-900 mt-1">{r.label}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{r.desc}</p>
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="fullName" className="text-gray-700 font-medium">Full name</Label>
+          <Label htmlFor="fullName" className="text-sm font-semibold text-gray-700">Full name</Label>
           <Input
-            id="fullName"
-            placeholder="Alex Johnson"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            className="h-11 bg-white"
+            id="fullName" placeholder="Alex Johnson"
+            value={fullName} onChange={(e) => setFullName(e.target.value)}
+            className="h-12 rounded-xl bg-white border-gray-200 text-gray-900 placeholder:text-gray-400 focus-visible:ring-blue-500"
             required
           />
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="email" className="text-gray-700 font-medium">Email</Label>
+          <Label htmlFor="email" className="text-sm font-semibold text-gray-700">Email</Label>
           <Input
-            id="email"
-            type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="h-11 bg-white"
+            id="email" type="email" placeholder="you@example.com"
+            value={email} onChange={(e) => setEmail(e.target.value)}
+            className="h-12 rounded-xl bg-white border-gray-200 text-gray-900 placeholder:text-gray-400 focus-visible:ring-blue-500"
             required
           />
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="password" className="text-gray-700 font-medium">Password</Label>
+          <Label htmlFor="password" className="text-sm font-semibold text-gray-700">Password</Label>
           <Input
-            id="password"
-            type="password"
-            placeholder="Min. 8 characters"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="h-11 bg-white"
-            minLength={8}
-            required
+            id="password" type="password" placeholder="Min. 8 characters"
+            value={password} onChange={(e) => setPassword(e.target.value)}
+            className="h-12 rounded-xl bg-white border-gray-200 text-gray-900 focus-visible:ring-blue-500"
+            minLength={8} required
           />
         </div>
 
-        <Button
-          type="submit"
-          className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-medium"
-          disabled={loading}
+        <button
+          type="submit" disabled={loading}
+          className="w-full h-12 rounded-xl font-semibold text-white text-sm mt-2 transition-opacity disabled:opacity-60"
+          style={{ background: loading ? '#93c5fd' : 'var(--brand)' }}
         >
-          {loading ? 'Creating account…' : 'Create account'}
-        </Button>
+          {loading ? 'Creating account…' : 'Create account →'}
+        </button>
       </form>
 
       <p className="text-sm text-gray-500 text-center mt-6">
         Already have an account?{' '}
-        <Link href="/login" className="text-blue-600 font-medium hover:underline">
+        <Link href="/login" className="font-semibold" style={{ color: 'var(--brand)' }}>
           Sign in
         </Link>
       </p>
