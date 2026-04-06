@@ -1,63 +1,81 @@
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex">
+    <div style={{ display: 'flex', flexDirection: 'row', minHeight: '100vh', width: '100%' }}>
 
       {/* ── Left: Brand panel ── */}
       <div
-        className="hidden lg:flex lg:w-[52%] flex-col justify-between p-14 text-white"
-        style={{ background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #3b82f6 100%)' }}
+        className="hidden lg:flex"
+        style={{
+          width: '52%',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          padding: '56px',
+          background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #3b82f6 100%)',
+          color: 'white',
+        }}
       >
         {/* Logo */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center font-black text-white text-lg tracking-tight">
-            FC
-          </div>
-          <span className="text-xl font-bold tracking-tight">FitCoach AI</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{
+            width: 40, height: 40, borderRadius: 14,
+            background: 'rgba(255,255,255,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontWeight: 900, fontSize: 15, color: 'white', letterSpacing: '-0.5px',
+          }}>FC</div>
+          <span style={{ fontSize: 20, fontWeight: 700, color: 'white' }}>FitCoach AI</span>
         </div>
 
-        {/* Hero copy */}
-        <div className="space-y-6">
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur rounded-full px-4 py-1.5 text-sm text-blue-100 w-fit">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+        {/* Hero */}
+        <div>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            background: 'rgba(255,255,255,0.12)', borderRadius: 999,
+            padding: '6px 16px', fontSize: 13, color: '#bfdbfe', marginBottom: 24,
+          }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#4ade80', display: 'inline-block' }} />
             Now in early access
           </div>
-          <h1 className="text-5xl font-extrabold leading-[1.1] tracking-tight">
+          <h1 style={{ fontSize: 46, fontWeight: 800, lineHeight: 1.1, color: 'white', marginBottom: 20 }}>
             Your coaching<br />business,<br />
-            <span className="text-blue-200">powered by AI.</span>
+            <span style={{ color: '#bfdbfe' }}>powered by AI.</span>
           </h1>
-          <p className="text-blue-100 text-lg leading-relaxed max-w-xs">
+          <p style={{ color: '#bfdbfe', fontSize: 17, lineHeight: 1.7, maxWidth: 320 }}>
             Manage leads, clients, programs, and check-ins — all in one platform built for serious coaches.
           </p>
         </div>
 
-        {/* Social proof */}
-        <div className="grid grid-cols-3 gap-4">
+        {/* Stats */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
           {[
             { stat: '3×', label: 'faster onboarding' },
             { stat: '80%', label: 'less admin work' },
             { stat: 'AI', label: 'at every step' },
           ].map(({ stat, label }) => (
-            <div key={label} className="bg-white/10 backdrop-blur rounded-2xl p-4">
-              <p className="text-2xl font-black text-white">{stat}</p>
-              <p className="text-xs text-blue-200 mt-1 leading-snug">{label}</p>
+            <div key={label} style={{
+              background: 'rgba(255,255,255,0.12)', borderRadius: 16, padding: '16px 20px',
+            }}>
+              <p style={{ fontSize: 26, fontWeight: 900, color: 'white', margin: 0 }}>{stat}</p>
+              <p style={{ fontSize: 12, color: '#bfdbfe', margin: '4px 0 0' }}>{label}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* ── Right: Form panel ── */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-gray-50">
-        <div className="w-full max-w-sm">
+      <div style={{
+        flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: 32, background: '#f9fafb',
+      }}>
+        <div style={{ width: '100%', maxWidth: 360 }}>
 
           {/* Mobile logo */}
-          <div className="flex items-center gap-2.5 mb-10 lg:hidden">
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-white text-sm"
-              style={{ background: 'var(--brand)' }}
-            >
-              FC
-            </div>
-            <span className="text-lg font-bold text-gray-900">FitCoach AI</span>
+          <div className="flex lg:hidden" style={{ alignItems: 'center', gap: 10, marginBottom: 40 }}>
+            <div style={{
+              width: 36, height: 36, borderRadius: 10, background: '#2563eb',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'white', fontWeight: 900, fontSize: 13,
+            }}>FC</div>
+            <span style={{ fontSize: 18, fontWeight: 700, color: '#111827' }}>FitCoach AI</span>
           </div>
 
           {children}
