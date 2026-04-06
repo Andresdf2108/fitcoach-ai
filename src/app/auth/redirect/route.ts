@@ -12,17 +12,20 @@ export async function GET(request: Request) {
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
-    return NextResponse.redirect(`${origin}/login`)
-  }
+  if (!user) return NextResponse.redirect(`${origin}/login`)
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role')
+    .select('role, onboarded')
     .eq('id', user.id)
     .single()
 
-  const destination = ROLE_DESTINATIONS[profile?.role ?? 'trainee'] ?? '/trainee/dashboard'
-  return NextResponse.redirect(`${origin}${destination}`)
+  const role = profile?.role ?? 'trainee'
+
+  // New users (no profile yet, or not onboarded) go to wizard
+  if (!profile || (!profile.onboarded && role !== 'admin')) {
+    return NextResponse.redirect(`${origin}/onboarding`)
+  }
+
+  return NextResponse.redirect(`${origin}${ROLE_DESTINATIONS[role] ?? '/trainee/dashboard'}`)
 }
