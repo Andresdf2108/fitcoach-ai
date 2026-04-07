@@ -16,6 +16,7 @@ export default function SignupPage() {
   const [role, setRole] = useState('trainer')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [emailSent, setEmailSent] = useState(false)
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault()
@@ -23,15 +24,27 @@ export default function SignupPage() {
     setLoading(true)
     try {
       const supabase = createClient()
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          data: { full_name: fullName, role },
-        },
+        options: { data: { full_name: fullName, role } },
       })
-      if (error) { setError(error.message); setLoading(false); return }
-      window.location.href = '/auth/redirect'
+
+      if (error) {
+        setError(error.message)
+        setLoading(false)
+        return
+      }
+
+      // Session exists → email confirmation is OFF → go straight in
+      if (data.session) {
+        window.location.href = '/auth/redirect'
+        return
+      }
+
+      // No session → email confirmation is ON → show check-email screen
+      setEmailSent(true)
+      setLoading(false)
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
       setLoading(false)
@@ -46,6 +59,42 @@ export default function SignupPage() {
     outline: 'none', boxSizing: 'border-box' as const, marginTop: 6,
   }
 
+  // ── Check your email screen ───────────────────────────────
+  if (emailSent) {
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ fontSize: 56, marginBottom: 16 }}>📬</div>
+        <h2 style={{ fontSize: 26, fontWeight: 800, color: '#111827', margin: '0 0 10px' }}>
+          Check your email
+        </h2>
+        <p style={{ color: '#6b7280', fontSize: 15, lineHeight: 1.7, margin: '0 0 28px' }}>
+          We sent a confirmation link to<br />
+          <strong style={{ color: '#111827' }}>{email}</strong>
+        </p>
+        <div style={{
+          background: '#fefce8', border: '1px solid #fef08a',
+          borderRadius: 14, padding: '16px 20px', marginBottom: 24, textAlign: 'left',
+        }}>
+          <p style={{ fontSize: 13, color: '#713f12', margin: 0, lineHeight: 1.7 }}>
+            1. Open the email from FitCoach AI<br />
+            2. Click the confirmation link<br />
+            3. You&apos;ll be taken straight to your setup wizard
+          </p>
+        </div>
+        <p style={{ fontSize: 13, color: '#9ca3af' }}>
+          Wrong email?{' '}
+          <button
+            onClick={() => setEmailSent(false)}
+            style={{ color: '#EAB308', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', fontSize: 13 }}
+          >
+            Go back
+          </button>
+        </p>
+      </div>
+    )
+  }
+
+  // ── Signup form ───────────────────────────────────────────
   return (
     <div>
       <h2 style={{ fontSize: 30, fontWeight: 800, color: '#111827', margin: '0 0 6px' }}>Get started</h2>
@@ -59,7 +108,6 @@ export default function SignupPage() {
           }}>{error}</div>
         )}
 
-        {/* Role selector */}
         <div style={{ marginBottom: 20 }}>
           <p style={{ fontSize: 14, fontWeight: 600, color: '#374151', margin: '0 0 10px' }}>I am a…</p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
@@ -83,29 +131,17 @@ export default function SignupPage() {
 
         <div style={{ marginBottom: 16 }}>
           <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#374151' }}>Full name</label>
-          <input
-            placeholder="Alex Johnson" required
-            value={fullName} onChange={(e) => setFullName(e.target.value)}
-            style={inputStyle}
-          />
+          <input placeholder="Alex Johnson" required value={fullName} onChange={(e) => setFullName(e.target.value)} style={inputStyle} />
         </div>
 
         <div style={{ marginBottom: 16 }}>
           <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#374151' }}>Email</label>
-          <input
-            type="email" placeholder="you@example.com" required
-            value={email} onChange={(e) => setEmail(e.target.value)}
-            style={inputStyle}
-          />
+          <input type="email" placeholder="you@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} />
         </div>
 
         <div style={{ marginBottom: 24 }}>
           <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#374151' }}>Password</label>
-          <input
-            type="password" placeholder="Min. 8 characters" minLength={8} required
-            value={password} onChange={(e) => setPassword(e.target.value)}
-            style={inputStyle}
-          />
+          <input type="password" placeholder="Min. 8 characters" minLength={8} required value={password} onChange={(e) => setPassword(e.target.value)} style={inputStyle} />
         </div>
 
         <button
@@ -123,9 +159,7 @@ export default function SignupPage() {
 
       <p style={{ textAlign: 'center', fontSize: 14, color: '#6b7280', marginTop: 24 }}>
         Already have an account?{' '}
-        <Link href="/login" style={{ color: '#EAB308', fontWeight: 700, textDecoration: 'none' }}>
-          Sign in
-        </Link>
+        <Link href="/login" style={{ color: '#EAB308', fontWeight: 700, textDecoration: 'none' }}>Sign in</Link>
       </p>
     </div>
   )
