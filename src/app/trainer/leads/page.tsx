@@ -6,7 +6,7 @@ const STAGES = [
   { key: 'attempted_contact',  label: 'Contacted',       color: '#3b82f6' },
   { key: 'qualified',          label: 'Qualified',       color: '#8b5cf6' },
   { key: 'consultation_booked',label: 'Consult Booked',  color: '#f59e0b' },
-  { key: 'consultation_done',  label: 'Consult Done',    color: '#EAB308' },
+  { key: 'consultation_done',  label: 'Consult Done',    color: '#FACC15' },
   { key: 'proposal_sent',      label: 'Proposal Sent',   color: '#10b981' },
 ]
 const WON_LOST = [
@@ -43,7 +43,7 @@ export default async function LeadsPage() {
         {/* Add Lead form */}
         <details style={{ position: 'relative' }}>
           <summary style={{
-            background: '#EAB308', color: '#000', fontWeight: 700, fontSize: 14,
+            background: '#FACC15', color: '#000', fontWeight: 700, fontSize: 14,
             padding: '10px 20px', borderRadius: 10, cursor: 'pointer', listStyle: 'none',
             userSelect: 'none',
           }}>
@@ -82,7 +82,7 @@ export default async function LeadsPage() {
                 {SOURCES.map(s => <option key={s} value={s.toLowerCase()}>{s}</option>)}
               </select>
               <button type="submit" style={{
-                background: '#EAB308', color: '#000', fontWeight: 700,
+                background: '#FACC15', color: '#000', fontWeight: 700,
                 border: 'none', borderRadius: 8, padding: '10px 0',
                 fontSize: 14, cursor: 'pointer', marginTop: 4,
               }}>
@@ -144,7 +144,7 @@ export default async function LeadsPage() {
                         {next && (
                           <form action={updateLeadStage.bind(null, lead.id, next.key)}>
                             <button type="submit" style={{
-                              background: '#EAB30820', color: '#EAB308', border: '1px solid #EAB30840',
+                              background: '#FACC1520', color: '#FACC15', border: '1px solid #FACC1540',
                               borderRadius: 6, padding: '4px 10px', fontSize: 11, fontWeight: 600, cursor: 'pointer',
                             }}>
                               → {next.label}

@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 
 const PLANS = [
   { name: 'free',       label: 'Free',       price: 0,   trainees: 5,    color: '#6b7280' },
-  { name: 'gold',       label: 'Gold',       price: 49,  trainees: 25,   color: '#EAB308' },
+  { name: 'gold',       label: 'Gold',       price: 49,  trainees: 25,   color: '#FACC15' },
   { name: 'platinum',   label: 'Platinum',   price: 99,  trainees: 75,   color: '#8b5cf6' },
   { name: 'diamond',    label: 'Diamond',    price: 199, trainees: 200,  color: '#3b82f6' },
   { name: 'enterprise', label: 'Enterprise', price: 499, trainees: 9999, color: '#10b981' },
@@ -31,7 +31,7 @@ export default async function BillingPage() {
 
       {/* Current plan */}
       <div style={{
-        background: '#1a1a1a', border: '1px solid #EAB30840', borderRadius: 16,
+        background: '#1a1a1a', border: '1px solid #FACC1540', borderRadius: 16,
         padding: 24, marginBottom: 32,
       }}>
         <p style={{ color: '#6b7280', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1, margin: '0 0 8px' }}>
@@ -39,7 +39,7 @@ export default async function BillingPage() {
         </p>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <p style={{ color: '#EAB308', fontWeight: 800, fontSize: 22, margin: '0 0 4px', textTransform: 'capitalize' }}>
+            <p style={{ color: '#FACC15', fontWeight: 800, fontSize: 22, margin: '0 0 4px', textTransform: 'capitalize' }}>
               {currentPlanName}
             </p>
             <p style={{ color: '#6b7280', fontSize: 14, margin: 0 }}>

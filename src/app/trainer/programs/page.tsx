@@ -63,7 +63,7 @@ export default async function ProgramsPage() {
 
         <details>
           <summary style={{
-            background: '#EAB308', color: '#000', fontWeight: 700, fontSize: 14,
+            background: '#FACC15', color: '#000', fontWeight: 700, fontSize: 14,
             padding: '10px 20px', borderRadius: 10, cursor: 'pointer', listStyle: 'none',
           }}>
             + New Program
@@ -99,7 +99,7 @@ export default async function ProgramsPage() {
                 </select>
               </div>
               <button type="submit" style={{
-                background: '#EAB308', color: '#000', fontWeight: 700,
+                background: '#FACC15', color: '#000', fontWeight: 700,
                 border: 'none', borderRadius: 8, padding: '10px 0',
                 fontSize: 14, cursor: 'pointer',
               }}>Create Program</button>

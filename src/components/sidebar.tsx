@@ -3,23 +3,71 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from '@/app/actions/auth'
-import { LogOut, Zap } from 'lucide-react'
+import {
+  LogOut, Zap,
+  LayoutDashboard, Target, Users, BookOpen,
+  ClipboardCheck, MessageCircle, CalendarDays,
+  CreditCard, BarChart3, Sparkles, Settings2,
+  Home, Dumbbell, TrendingUp,
+  UserCheck, DollarSign, Package, LineChart,
+} from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
-export interface NavItem {
+interface NavItem {
   label: string
   href: string
   icon: LucideIcon
 }
 
+const TRAINER_NAV: NavItem[] = [
+  { label: 'Dashboard',    href: '/trainer/dashboard',  icon: LayoutDashboard },
+  { label: 'Leads',        href: '/trainer/leads',      icon: Target },
+  { label: 'Clients',      href: '/trainer/clients',    icon: Users },
+  { label: 'Programs',     href: '/trainer/programs',   icon: BookOpen },
+  { label: 'Check-ins',    href: '/trainer/checkins',   icon: ClipboardCheck },
+  { label: 'Messages',     href: '/trainer/messages',   icon: MessageCircle },
+  { label: 'Calendar',     href: '/trainer/calendar',   icon: CalendarDays },
+  { label: 'Billing',      href: '/trainer/billing',    icon: CreditCard },
+  { label: 'Reports',      href: '/trainer/reports',    icon: BarChart3 },
+  { label: 'AI Assistant', href: '/trainer/ai',         icon: Sparkles },
+  { label: 'Settings',     href: '/trainer/settings',   icon: Settings2 },
+]
+
+const TRAINEE_NAV: NavItem[] = [
+  { label: 'Home',       href: '/trainee/dashboard', icon: Home },
+  { label: 'Workouts',   href: '/trainee/workouts',  icon: Dumbbell },
+  { label: 'Progress',   href: '/trainee/progress',  icon: TrendingUp },
+  { label: 'Check-ins',  href: '/trainee/checkins',  icon: ClipboardCheck },
+  { label: 'Messages',   href: '/trainee/messages',  icon: MessageCircle },
+  { label: 'Sessions',   href: '/trainee/sessions',  icon: CalendarDays },
+  { label: 'Billing',    href: '/trainee/billing',   icon: CreditCard },
+]
+
+const ADMIN_NAV: NavItem[] = [
+  { label: 'Overview',      href: '/admin/dashboard',     icon: LayoutDashboard },
+  { label: 'Trainers',      href: '/admin/trainers',      icon: UserCheck },
+  { label: 'Trainees',      href: '/admin/trainees',      icon: Users },
+  { label: 'Revenue',       href: '/admin/revenue',       icon: DollarSign },
+  { label: 'Subscriptions', href: '/admin/subscriptions', icon: Package },
+  { label: 'Analytics',     href: '/admin/analytics',     icon: LineChart },
+  { label: 'AI Insights',   href: '/admin/ai-insights',   icon: Sparkles },
+  { label: 'Settings',      href: '/admin/settings',      icon: Settings2 },
+]
+
+const NAV_BY_ROLE: Record<string, NavItem[]> = {
+  trainer: TRAINER_NAV,
+  trainee: TRAINEE_NAV,
+  admin:   ADMIN_NAV,
+}
+
 interface SidebarProps {
-  nav: NavItem[]
   role: string
   userName?: string
 }
 
-export function Sidebar({ nav, role, userName }: SidebarProps) {
+export function Sidebar({ role, userName }: SidebarProps) {
   const pathname = usePathname()
+  const nav = NAV_BY_ROLE[role] ?? []
   const initials = userName
     ? userName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
     : '?'
@@ -35,12 +83,11 @@ export function Sidebar({ nav, role, userName }: SidebarProps) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
             width: 34, height: 34, borderRadius: 9,
-            background: 'linear-gradient(135deg, #EAB308 0%, #a16207 100%)',
+            background: '#FACC15',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 16px rgba(234,179,8,0.35), inset 0 1px 0 rgba(255,255,255,0.2)',
             flexShrink: 0,
           }}>
-            <Zap size={16} color="#000" strokeWidth={3} fill="#000" />
+            <Zap size={16} color="#000" strokeWidth={2.5} fill="#000" />
           </div>
           <div>
             <div style={{ fontSize: 13, fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.2 }}>FitCoach AI</div>
@@ -63,9 +110,8 @@ export function Sidebar({ nav, role, userName }: SidebarProps) {
                 padding: '7px 10px', borderRadius: 7, textDecoration: 'none',
                 fontSize: 13,
                 fontWeight: active ? 600 : 400,
-                color: active ? '#EAB308' : '#52525b',
-                background: active ? 'rgba(234,179,8,0.07)' : 'transparent',
-                transition: 'color 0.1s, background 0.1s',
+                color: active ? '#FACC15' : '#52525b',
+                background: active ? 'rgba(250,204,21,0.07)' : 'transparent',
               }}
             >
               <Icon
@@ -88,10 +134,9 @@ export function Sidebar({ nav, role, userName }: SidebarProps) {
           }}>
             <div style={{
               width: 26, height: 26, borderRadius: '50%', flexShrink: 0,
-              background: 'linear-gradient(135deg, #EAB308, #a16207)',
+              background: '#FACC15',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 10, fontWeight: 800, color: '#000',
-              boxShadow: '0 0 8px rgba(234,179,8,0.3)',
             }}>{initials}</div>
             <div style={{ overflow: 'hidden', minWidth: 0 }}>
               <div style={{ fontSize: 12, fontWeight: 600, color: '#a1a1aa', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{userName}</div>

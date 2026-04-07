@@ -72,9 +72,9 @@ export default async function ClientsPage() {
                 {/* Avatar */}
                 <div style={{
                   width: 44, height: 44, borderRadius: '50%',
-                  background: '#EAB30820', border: '2px solid #EAB30840',
+                  background: '#FACC1520', border: '2px solid #FACC1540',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: '#EAB308', fontWeight: 800, fontSize: 16, flexShrink: 0,
+                  color: '#FACC15', fontWeight: 800, fontSize: 16, flexShrink: 0,
                 }}>
                   {(profile?.full_name ?? '?')[0].toUpperCase()}
                 </div>

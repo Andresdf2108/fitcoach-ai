@@ -104,7 +104,7 @@ export default function OnboardingPage() {
       }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{
-            width: 48, height: 48, borderRadius: 14, background: '#EAB308',
+            width: 48, height: 48, borderRadius: 14, background: '#FACC15',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontWeight: 900, fontSize: 18, color: '#000', margin: '0 auto 16px',
           }}>FC</div>
@@ -124,7 +124,7 @@ export default function OnboardingPage() {
       {Array.from({ length: totalSteps }).map((_, i) => (
         <div key={i} style={{
           flex: 1, height: 4, borderRadius: 99,
-          background: i < step ? '#EAB308' : '#e5e7eb',
+          background: i < step ? '#FACC15' : '#e5e7eb',
           transition: 'background 0.3s',
         }} />
       ))}
@@ -139,7 +139,7 @@ export default function OnboardingPage() {
   const h2 = { fontSize: 26, fontWeight: 800, color: '#111827', margin: '0 0 8px' }
   const sub = { fontSize: 15, color: '#6b7280', margin: '0 0 28px', lineHeight: 1.6 }
   const btnPrimary = {
-    height: 50, padding: '0 28px', background: '#EAB308', border: 'none',
+    height: 50, padding: '0 28px', background: '#FACC15', border: 'none',
     borderRadius: 12, fontWeight: 700, fontSize: 15, color: '#000',
     cursor: 'pointer', marginTop: 8,
   }
@@ -162,7 +162,7 @@ export default function OnboardingPage() {
       <div style={inner}>
         <div style={{ marginBottom: 28 }}>
           <div style={{
-            width: 52, height: 52, borderRadius: 14, background: '#EAB308',
+            width: 52, height: 52, borderRadius: 14, background: '#FACC15',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontWeight: 900, fontSize: 18, color: '#000', marginBottom: 20,
           }}>FC</div>
@@ -224,7 +224,7 @@ export default function OnboardingPage() {
                     key={s} type="button" onClick={() => toggleSpec(s)}
                     style={{
                       padding: '8px 14px', borderRadius: 999, fontSize: 13, fontWeight: 600,
-                      border: `2px solid ${specializations.includes(s) ? '#EAB308' : '#e5e7eb'}`,
+                      border: `2px solid ${specializations.includes(s) ? '#FACC15' : '#e5e7eb'}`,
                       background: specializations.includes(s) ? '#fefce8' : '#fafafa',
                       color: specializations.includes(s) ? '#713f12' : '#374151',
                       cursor: 'pointer',
@@ -249,7 +249,7 @@ export default function OnboardingPage() {
                     key={g.value} type="button" onClick={() => setGoal(g.value)}
                     style={{
                       padding: '14px 16px', borderRadius: 12, textAlign: 'left',
-                      border: `1.5px solid ${goal === g.value ? '#EAB308' : '#e5e7eb'}`,
+                      border: `1.5px solid ${goal === g.value ? '#FACC15' : '#e5e7eb'}`,
                       background: goal === g.value ? '#fefce8' : '#fafafa',
                       cursor: 'pointer',
                     }}
@@ -270,7 +270,7 @@ export default function OnboardingPage() {
                     key={l.value} type="button" onClick={() => setFitnessLevel(l.value)}
                     style={{
                       padding: '14px 16px', borderRadius: 12, textAlign: 'left',
-                      border: `2px solid ${fitnessLevel === l.value ? '#EAB308' : '#e5e7eb'}`,
+                      border: `2px solid ${fitnessLevel === l.value ? '#FACC15' : '#e5e7eb'}`,
                       background: fitnessLevel === l.value ? '#fefce8' : '#fafafa',
                       cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                     }}
@@ -279,7 +279,7 @@ export default function OnboardingPage() {
                       <p style={{ fontSize: 14, fontWeight: 700, color: '#111827', margin: 0 }}>{l.label}</p>
                       <p style={{ fontSize: 12, color: '#9ca3af', margin: '2px 0 0' }}>{l.desc}</p>
                     </div>
-                    {fitnessLevel === l.value && <span style={{ color: '#EAB308', fontSize: 18 }}>✓</span>}
+                    {fitnessLevel === l.value && <span style={{ color: '#FACC15', fontSize: 18 }}>✓</span>}
                   </button>
                 ))}
               </div>
@@ -314,7 +314,7 @@ export default function OnboardingPage() {
             <div style={{ textAlign: 'center', marginBottom: 32 }}>
               <div style={{
                 width: 52, height: 52, borderRadius: 14,
-                background: 'linear-gradient(135deg, #EAB308, #a16207)',
+                background: '#FACC15',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 margin: '0 auto 16px',
                 boxShadow: '0 0 20px rgba(234,179,8,0.3)',
@@ -338,7 +338,7 @@ export default function OnboardingPage() {
                 'Check your dashboard stats',
               ].map((item) => (
                 <p key={item} style={{ fontSize: 13, color: '#6b7280', margin: '6px 0', lineHeight: 1.5, paddingLeft: 16, position: 'relative' }}>
-                  <span style={{ position: 'absolute', left: 0, color: '#EAB308' }}>›</span>
+                  <span style={{ position: 'absolute', left: 0, color: '#FACC15' }}>›</span>
                   {item}
                 </p>
               ))}

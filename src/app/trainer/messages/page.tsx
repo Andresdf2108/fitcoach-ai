@@ -93,7 +93,7 @@ export default async function MessagesPage() {
               padding: '10px 14px', color: '#fff', fontSize: 14, outline: 'none',
             }} />
             <button type="submit" style={{
-              background: '#EAB308', color: '#000', fontWeight: 700, border: 'none',
+              background: '#FACC15', color: '#000', fontWeight: 700, border: 'none',
               borderRadius: 8, padding: '10px 18px', fontSize: 14, cursor: 'pointer', flexShrink: 0,
             }}>Send</button>
           </form>
@@ -109,9 +109,9 @@ export default async function MessagesPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
             <div style={{
               width: 36, height: 36, borderRadius: '50%',
-              background: '#EAB30820', border: '2px solid #EAB30840',
+              background: '#FACC1520', border: '2px solid #FACC1540',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#EAB308', fontWeight: 800, fontSize: 14,
+              color: '#FACC15', fontWeight: 800, fontSize: 14,
             }}>
               {(conv.profile?.full_name ?? '?')[0].toUpperCase()}
             </div>
@@ -130,7 +130,7 @@ export default async function MessagesPage() {
                 }}>
                   <div style={{
                     maxWidth: '75%',
-                    background: isMine ? '#EAB308' : '#222',
+                    background: isMine ? '#FACC15' : '#222',
                     color: isMine ? '#000' : '#fff',
                     borderRadius: isMine ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
                     padding: '8px 14px', fontSize: 14, lineHeight: 1.5,
@@ -156,7 +156,7 @@ export default async function MessagesPage() {
               padding: '8px 12px', color: '#fff', fontSize: 13, outline: 'none',
             }} />
             <button type="submit" style={{
-              background: '#EAB308', color: '#000', fontWeight: 700, border: 'none',
+              background: '#FACC15', color: '#000', fontWeight: 700, border: 'none',
               borderRadius: 8, padding: '8px 16px', fontSize: 13, cursor: 'pointer',
             }}>↑</button>
           </form>

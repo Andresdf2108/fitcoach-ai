@@ -34,7 +34,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div style={{ display: 'flex', alignItems: 'center', gap: 11, position: 'relative' }}>
           <div style={{
             width: 38, height: 38, borderRadius: 11,
-            background: 'linear-gradient(135deg, #EAB308 0%, #a16207 100%)',
+            background: '#FACC15',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontWeight: 900, fontSize: 13, color: '#000', letterSpacing: '-0.5px',
             boxShadow: '0 0 20px rgba(234,179,8,0.4)',
@@ -48,14 +48,14 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             display: 'inline-flex', alignItems: 'center', gap: 7,
             background: 'rgba(234,179,8,0.1)', border: '1px solid rgba(234,179,8,0.2)',
             borderRadius: 999, padding: '5px 14px', fontSize: 11,
-            color: '#EAB308', marginBottom: 28, letterSpacing: '0.08em', fontWeight: 700,
+            color: '#FACC15', marginBottom: 28, letterSpacing: '0.08em', fontWeight: 700,
           }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80', display: 'inline-block', boxShadow: '0 0 6px #4ade80' }} />
             EARLY ACCESS
           </div>
           <h1 style={{ fontSize: 42, fontWeight: 800, lineHeight: 1.1, color: 'white', margin: '0 0 18px', letterSpacing: '-0.04em' }}>
             Your coaching<br />business,<br />
-            <span style={{ color: '#EAB308' }}>supercharged.</span>
+            <span style={{ color: '#FACC15' }}>supercharged.</span>
           </h1>
           <p style={{ color: '#52525b', fontSize: 15, lineHeight: 1.7, maxWidth: 320, margin: 0 }}>
             Manage leads, clients, programs, and check-ins — built for coaches who are serious about scaling.
@@ -73,7 +73,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               background: '#161616', border: '1px solid rgba(255,255,255,0.06)',
               borderRadius: 14, padding: '16px 18px',
             }}>
-              <p style={{ fontSize: 24, fontWeight: 900, color: '#EAB308', margin: 0, letterSpacing: '-0.03em' }}>{stat}</p>
+              <p style={{ fontSize: 24, fontWeight: 900, color: '#FACC15', margin: 0, letterSpacing: '-0.03em' }}>{stat}</p>
               <p style={{ fontSize: 11, color: '#52525b', margin: '5px 0 0', lineHeight: 1.4, fontWeight: 500 }}>{label}</p>
             </div>
           ))}
@@ -91,7 +91,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <div className="flex lg:hidden" style={{ alignItems: 'center', gap: 10, marginBottom: 40 }}>
             <div style={{
               width: 34, height: 34, borderRadius: 10,
-              background: 'linear-gradient(135deg, #EAB308 0%, #a16207 100%)',
+              background: '#FACC15',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontWeight: 900, fontSize: 12, color: '#000',
             }}>FC</div>

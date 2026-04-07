@@ -64,7 +64,7 @@ export default function AIAssistantPage() {
                 padding: '11px 16px', color: '#9ca3af', fontSize: 13, textAlign: 'left',
                 cursor: 'pointer', transition: 'border-color 0.15s',
               }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = '#EAB30850')}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = '#FACC1550')}
               onMouseLeave={e => (e.currentTarget.style.borderColor = '#2a2a2a')}
               >
                 {s}
@@ -84,7 +84,7 @@ export default function AIAssistantPage() {
             <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start' }}>
               <div style={{
                 maxWidth: '85%',
-                background: m.role === 'user' ? '#EAB308' : '#1a1a1a',
+                background: m.role === 'user' ? '#FACC15' : '#1a1a1a',
                 color: m.role === 'user' ? '#000' : '#e5e7eb',
                 border: m.role === 'assistant' ? '1px solid #2a2a2a' : 'none',
                 borderRadius: m.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
@@ -105,7 +105,7 @@ export default function AIAssistantPage() {
                 <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
                   {[0, 1, 2].map(i => (
                     <div key={i} style={{
-                      width: 8, height: 8, borderRadius: '50%', background: '#EAB308',
+                      width: 8, height: 8, borderRadius: '50%', background: '#FACC15',
                       animation: 'pulse 1.4s ease-in-out infinite',
                       animationDelay: `${i * 0.2}s`, opacity: 0.6,
                     }} />
@@ -135,7 +135,7 @@ export default function AIAssistantPage() {
           }}
         />
         <button onClick={() => send(input)} disabled={loading || !input.trim()} style={{
-          background: input.trim() ? '#EAB308' : '#1a1a1a',
+          background: input.trim() ? '#FACC15' : '#1a1a1a',
           color: input.trim() ? '#000' : '#374151',
           border: '1px solid #2a2a2a',
           fontWeight: 700, borderRadius: 12, padding: '12px 20px',

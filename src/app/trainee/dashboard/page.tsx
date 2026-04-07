@@ -12,7 +12,7 @@ export default async function TraineeDashboard() {
   const firstName = profile?.full_name?.split(' ')[0] ?? 'Athlete'
 
   const cards = [
-    { label: "Today's Workout",  value: 'Not assigned yet', icon: Dumbbell,       href: '/trainee/workouts',  color: '#EAB308' },
+    { label: "Today's Workout",  value: 'Not assigned yet', icon: Dumbbell,       href: '/trainee/workouts',  color: '#FACC15' },
     { label: 'Current Streak',   value: '0 days',           icon: Flame,          href: '/trainee/progress',  color: '#f59e0b' },
     { label: 'Pending Check-in', value: 'None due',         icon: ClipboardCheck, href: '/trainee/checkins',  color: '#10b981' },
     { label: 'New Messages',     value: '0',                icon: MessageCircle,  href: '/trainee/messages',  color: '#8b5cf6' },

@@ -111,16 +111,16 @@ function CheckinCard({ checkin: c, addFeedback, markReviewed, reviewed = false }
 
   return (
     <div style={{
-      background: '#1a1a1a', border: `1px solid ${reviewed ? '#2a2a2a' : '#EAB30830'}`,
+      background: '#1a1a1a', border: `1px solid ${reviewed ? '#2a2a2a' : '#FACC1530'}`,
       borderRadius: 16, padding: 24, opacity: reviewed ? 0.7 : 1,
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 18 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{
             width: 38, height: 38, borderRadius: '50%',
-            background: '#EAB30820', border: '2px solid #EAB30840',
+            background: '#FACC1520', border: '2px solid #FACC1540',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#EAB308', fontWeight: 800, fontSize: 14,
+            color: '#FACC15', fontWeight: 800, fontSize: 14,
           }}>{name[0].toUpperCase()}</div>
           <div>
             <p style={{ color: '#fff', fontWeight: 700, fontSize: 15, margin: 0 }}>{name}</p>
@@ -130,7 +130,7 @@ function CheckinCard({ checkin: c, addFeedback, markReviewed, reviewed = false }
         {c.weight_kg && (
           <div style={{ textAlign: 'right' }}>
             <p style={{ color: '#6b7280', fontSize: 11, margin: '0 0 2px' }}>Weight</p>
-            <p style={{ color: '#EAB308', fontWeight: 700, fontSize: 16, margin: 0 }}>{c.weight_kg} kg</p>
+            <p style={{ color: '#FACC15', fontWeight: 700, fontSize: 16, margin: 0 }}>{c.weight_kg} kg</p>
           </div>
         )}
       </div>
@@ -144,7 +144,7 @@ function CheckinCard({ checkin: c, addFeedback, markReviewed, reviewed = false }
 
       {c.workouts_completed > 0 && (
         <p style={{ color: '#6b7280', fontSize: 13, margin: '12px 0 0' }}>
-          Workouts completed: <span style={{ color: '#EAB308', fontWeight: 700 }}>{c.workouts_completed}</span>
+          Workouts completed: <span style={{ color: '#FACC15', fontWeight: 700 }}>{c.workouts_completed}</span>
         </p>
       )}
 
@@ -158,9 +158,9 @@ function CheckinCard({ checkin: c, addFeedback, markReviewed, reviewed = false }
 
       {/* Trainer feedback */}
       {c.trainer_feedback && (
-        <div style={{ marginTop: 12, background: '#EAB30810', border: '1px solid #EAB30820', borderRadius: 8, padding: '10px 14px' }}>
+        <div style={{ marginTop: 12, background: '#FACC1510', border: '1px solid #FACC1520', borderRadius: 8, padding: '10px 14px' }}>
           <p style={{ color: '#6b7280', fontSize: 11, fontWeight: 600, margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: 0.5 }}>Your Feedback</p>
-          <p style={{ color: '#EAB308', fontSize: 13, margin: 0, lineHeight: 1.6 }}>{c.trainer_feedback}</p>
+          <p style={{ color: '#FACC15', fontSize: 13, margin: 0, lineHeight: 1.6 }}>{c.trainer_feedback}</p>
         </div>
       )}
 
@@ -180,7 +180,7 @@ function CheckinCard({ checkin: c, addFeedback, markReviewed, reviewed = false }
           />
           <div style={{ display: 'flex', gap: 8 }}>
             <button type="submit" style={{
-              background: '#EAB308', color: '#000', fontWeight: 700, border: 'none',
+              background: '#FACC15', color: '#000', fontWeight: 700, border: 'none',
               borderRadius: 8, padding: '8px 18px', fontSize: 13, cursor: 'pointer',
             }}>Send Feedback & Mark Reviewed</button>
             <form action={markReviewed.bind(null, c.id)}>

@@ -28,12 +28,12 @@ export default async function SettingsPage() {
 
       {/* Plan badge */}
       <div style={{
-        background: '#1a1a1a', border: '1px solid #EAB30830', borderRadius: 12,
+        background: '#1a1a1a', border: '1px solid #FACC1530', borderRadius: 12,
         padding: '14px 20px', marginBottom: 28, display: 'flex', justifyContent: 'space-between', alignItems: 'center',
       }}>
         <div>
           <p style={{ color: '#6b7280', fontSize: 12, margin: '0 0 2px', fontWeight: 500 }}>Current Plan</p>
-          <p style={{ color: '#EAB308', fontWeight: 700, fontSize: 16, margin: 0, textTransform: 'capitalize' }}>
+          <p style={{ color: '#FACC15', fontWeight: 700, fontSize: 16, margin: 0, textTransform: 'capitalize' }}>
             {plan?.name ?? 'Free'}
           </p>
         </div>
@@ -113,10 +113,10 @@ export default async function SettingsPage() {
               return (
                 <label key={spec} style={{
                   display: 'flex', alignItems: 'center', gap: 8,
-                  background: checked ? '#EAB30820' : '#111',
-                  border: `1px solid ${checked ? '#EAB30860' : '#2a2a2a'}`,
+                  background: checked ? '#FACC1520' : '#111',
+                  border: `1px solid ${checked ? '#FACC1560' : '#2a2a2a'}`,
                   borderRadius: 8, padding: '7px 14px', cursor: 'pointer',
-                  color: checked ? '#EAB308' : '#9ca3af', fontSize: 13, fontWeight: checked ? 600 : 400,
+                  color: checked ? '#FACC15' : '#9ca3af', fontSize: 13, fontWeight: checked ? 600 : 400,
                 }}>
                   <input
                     type="checkbox"
@@ -133,7 +133,7 @@ export default async function SettingsPage() {
         </div>
 
         <button type="submit" style={{
-          background: '#EAB308', color: '#000', fontWeight: 700, fontSize: 15,
+          background: '#FACC15', color: '#000', fontWeight: 700, fontSize: 15,
           border: 'none', borderRadius: 10, padding: '12px 28px', cursor: 'pointer',
         }}>
           Save Changes

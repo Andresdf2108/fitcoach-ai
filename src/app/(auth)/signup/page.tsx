@@ -22,7 +22,7 @@ export default async function SignupPage({
       <div style={{ textAlign: 'center' }}>
         <div style={{
           width: 56, height: 56, borderRadius: 16,
-          background: 'linear-gradient(135deg, #EAB308, #a16207)',
+          background: '#FACC15',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           margin: '0 auto 20px', fontSize: 26,
           boxShadow: '0 0 24px rgba(234,179,8,0.3)',
@@ -44,7 +44,7 @@ export default async function SignupPage({
             3. You&apos;ll be taken to your setup wizard
           </p>
         </div>
-        <Link href="/signup" style={{ color: '#EAB308', fontWeight: 600, fontSize: 13 }}>
+        <Link href="/signup" style={{ color: '#FACC15', fontWeight: 600, fontSize: 13 }}>
           ← Try a different email
         </Link>
       </div>
@@ -105,7 +105,7 @@ export default async function SignupPage({
 
         <button type="submit" style={{
           display: 'block', width: '100%', height: 46,
-          background: 'linear-gradient(135deg, #EAB308 0%, #a16207 100%)',
+          background: '#FACC15',
           color: '#000', fontWeight: 700, fontSize: 14,
           border: 'none', borderRadius: 10, cursor: 'pointer',
           boxShadow: '0 4px 14px rgba(234,179,8,0.3)',
@@ -117,7 +117,7 @@ export default async function SignupPage({
 
       <p style={{ textAlign: 'center', fontSize: 13, color: '#9ca3af', marginTop: 20 }}>
         Already have an account?{' '}
-        <Link href="/login" style={{ color: '#EAB308', fontWeight: 600, textDecoration: 'none' }}>Sign in</Link>
+        <Link href="/login" style={{ color: '#FACC15', fontWeight: 600, textDecoration: 'none' }}>Sign in</Link>
       </p>
     </div>
   )

@@ -82,12 +82,12 @@ export default async function TrainerDashboard() {
               <h2 style={{ fontSize: 14, fontWeight: 700, color: '#fff', margin: '0 0 3px', letterSpacing: '-0.01em' }}>Capacity</h2>
               <p style={{ fontSize: 12, color: '#52525b', margin: 0 }}>
                 {activeCount} of {maxCount} trainees &nbsp;·&nbsp;
-                <span style={{ color: '#EAB308', fontWeight: 600, textTransform: 'capitalize' }}>{plan?.name ?? 'Free'}</span>
+                <span style={{ color: '#FACC15', fontWeight: 600, textTransform: 'capitalize' }}>{plan?.name ?? 'Free'}</span>
               </p>
             </div>
             <span style={{
               fontSize: 18, fontWeight: 800,
-              color: capacityPct >= 80 ? '#f59e0b' : '#EAB308',
+              color: capacityPct >= 80 ? '#f59e0b' : '#FACC15',
               letterSpacing: '-0.02em',
             }}>{capacityPct}%</span>
           </div>
@@ -95,7 +95,7 @@ export default async function TrainerDashboard() {
             <div style={{
               height: '100%', borderRadius: 99,
               width: `${capacityPct}%`,
-              background: capacityPct >= 100 ? '#ef4444' : capacityPct >= 80 ? '#f59e0b' : '#EAB308',
+              background: capacityPct >= 100 ? '#ef4444' : capacityPct >= 80 ? '#f59e0b' : '#FACC15',
               transition: 'width 0.4s',
             }} />
           </div>

@@ -47,14 +47,14 @@ export default async function CalendarPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 8 }}>
           {days.map((d, i) => (
             <div key={i} style={{
-              background: i === 0 ? '#EAB30820' : '#1a1a1a',
-              border: `1px solid ${i === 0 ? '#EAB30840' : '#2a2a2a'}`,
+              background: i === 0 ? '#FACC1520' : '#1a1a1a',
+              border: `1px solid ${i === 0 ? '#FACC1540' : '#2a2a2a'}`,
               borderRadius: 12, padding: '12px 8px', textAlign: 'center',
             }}>
               <p style={{ color: '#6b7280', fontSize: 11, margin: '0 0 4px', fontWeight: 600 }}>
                 {d.toLocaleDateString('en-CA', { weekday: 'short' }).toUpperCase()}
               </p>
-              <p style={{ color: i === 0 ? '#EAB308' : '#fff', fontWeight: 800, fontSize: 20, margin: 0 }}>
+              <p style={{ color: i === 0 ? '#FACC15' : '#fff', fontWeight: 800, fontSize: 20, margin: 0 }}>
                 {d.getDate()}
               </p>
             </div>
@@ -107,7 +107,7 @@ export default async function CalendarPage() {
               padding: '10px 14px', color: '#fff', fontSize: 14, outline: 'none',
             }} />
             <button type="submit" style={{
-              background: '#EAB308', color: '#000', fontWeight: 700, border: 'none',
+              background: '#FACC15', color: '#000', fontWeight: 700, border: 'none',
               borderRadius: 8, padding: '11px 0', fontSize: 14, cursor: 'pointer',
             }}>
               Schedule Session

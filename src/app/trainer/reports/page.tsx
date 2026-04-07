@@ -34,7 +34,7 @@ export default async function ReportsPage() {
       stats: [
         { label: 'Total Leads', value: totalLeads ?? 0, color: '#9ca3af' },
         { label: 'Won', value: wonLeads ?? 0, color: '#10b981' },
-        { label: 'Conversion Rate', value: `${conversionRate}%`, color: '#EAB308' },
+        { label: 'Conversion Rate', value: `${conversionRate}%`, color: '#FACC15' },
       ],
     },
     {
@@ -43,14 +43,14 @@ export default async function ReportsPage() {
         { label: 'Total Clients', value: totalClients ?? 0, color: '#9ca3af' },
         { label: 'Active', value: activeClients ?? 0, color: '#10b981' },
         { label: 'Paused', value: pausedClients ?? 0, color: '#f59e0b' },
-        { label: 'Retention Rate', value: `${retentionRate}%`, color: '#EAB308' },
+        { label: 'Retention Rate', value: `${retentionRate}%`, color: '#FACC15' },
       ],
     },
     {
       title: 'Engagement',
       stats: [
         { label: 'Total Check-ins', value: checkinCount ?? 0, color: '#9ca3af' },
-        { label: 'Avg / Client', value: totalClients ? Math.round((checkinCount ?? 0) / totalClients) : 0, color: '#EAB308' },
+        { label: 'Avg / Client', value: totalClients ? Math.round((checkinCount ?? 0) / totalClients) : 0, color: '#FACC15' },
       ],
     },
   ]
@@ -92,7 +92,7 @@ export default async function ReportsPage() {
           {[
             { label: 'Total Leads', value: totalLeads ?? 0, max: totalLeads ?? 1, color: '#6b7280' },
             { label: 'Won (Converted)', value: wonLeads ?? 0, max: totalLeads ?? 1, color: '#10b981' },
-            { label: 'Active Clients', value: activeClients ?? 0, max: totalLeads ?? 1, color: '#EAB308' },
+            { label: 'Active Clients', value: activeClients ?? 0, max: totalLeads ?? 1, color: '#FACC15' },
           ].map(row => (
             <div key={row.label} style={{ marginBottom: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>

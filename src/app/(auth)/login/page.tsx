@@ -41,7 +41,7 @@ export default async function LoginPage({
 
         <button type="submit" style={{
           display: 'block', width: '100%', height: 46,
-          background: 'linear-gradient(135deg, #EAB308 0%, #a16207 100%)',
+          background: '#FACC15',
           color: '#000', fontWeight: 700, fontSize: 14,
           border: 'none', borderRadius: 10, cursor: 'pointer',
           boxShadow: '0 4px 14px rgba(234,179,8,0.3)',
@@ -53,7 +53,7 @@ export default async function LoginPage({
 
       <p style={{ textAlign: 'center', fontSize: 13, color: '#9ca3af', marginTop: 20 }}>
         Don&apos;t have an account?{' '}
-        <Link href="/signup" style={{ color: '#EAB308', fontWeight: 600, textDecoration: 'none' }}>Sign up free</Link>
+        <Link href="/signup" style={{ color: '#FACC15', fontWeight: 600, textDecoration: 'none' }}>Sign up free</Link>
       </p>
     </div>
   )

@@ -7,7 +7,7 @@ interface ComingSoonProps {
   color?: string
 }
 
-export function ComingSoon({ icon: Icon, title, description, color = '#EAB308' }: ComingSoonProps) {
+export function ComingSoon({ icon: Icon, title, description, color = '#FACC15' }: ComingSoonProps) {
   return (
     <div style={{ padding: '40px 40px 60px' }}>
       <div style={{ marginBottom: 32 }}>
