@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
+import { usePathname } from 'next/navigation'
+import { signOut } from '@/app/actions/auth'
 
 interface NavItem {
   label: string
@@ -11,59 +11,73 @@ interface NavItem {
 }
 
 interface SidebarProps {
-  title: string
   nav: NavItem[]
   role: string
+  userName?: string
 }
 
-export function Sidebar({ title, nav, role }: SidebarProps) {
+export function Sidebar({ nav, role, userName }: SidebarProps) {
   const pathname = usePathname()
-  const router = useRouter()
-
-  async function handleSignOut() {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push('/login')
-  }
-
-  const roleColors: Record<string, string> = {
-    admin: 'bg-purple-600',
-    trainer: 'bg-blue-600',
-    trainee: 'bg-emerald-600',
-  }
 
   return (
-    <aside className={`w-60 min-h-screen flex flex-col ${roleColors[role] ?? 'bg-gray-800'} text-white`}>
-      <div className="px-5 py-6 border-b border-white/10">
-        <p className="text-xs font-semibold uppercase tracking-widest text-white/50">{role}</p>
-        <h1 className="text-lg font-bold mt-0.5">{title}</h1>
+    <aside style={{
+      width: 240, minHeight: '100vh', display: 'flex', flexDirection: 'column',
+      background: '#0f0f0f', borderRight: '1px solid #1f1f1f', flexShrink: 0,
+    }}>
+      {/* Logo */}
+      <div style={{ padding: '24px 20px 20px', borderBottom: '1px solid #1f1f1f' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 34, height: 34, borderRadius: 10, background: '#EAB308',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontWeight: 900, fontSize: 13, color: '#000', letterSpacing: '-0.5px',
+          }}>FC</div>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 800, color: '#fff', lineHeight: 1.2 }}>FitCoach AI</div>
+            <div style={{ fontSize: 10, color: '#4b5563', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>{role}</div>
+          </div>
+        </div>
       </div>
 
-      <nav className="flex-1 px-3 py-4 space-y-0.5">
+      {/* Nav */}
+      <nav style={{ flex: 1, padding: '12px 10px', display: 'flex', flexDirection: 'column', gap: 2 }}>
         {nav.map((item) => {
           const active = pathname === item.href || pathname.startsWith(item.href + '/')
           return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-                active ? 'bg-white/20 font-medium' : 'hover:bg-white/10'
-              }`}
-            >
-              <span>{item.icon}</span>
+            <Link key={item.href} href={item.href} style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              padding: '9px 12px', borderRadius: 10, textDecoration: 'none',
+              fontSize: 13, fontWeight: active ? 700 : 500,
+              background: active ? '#1a1a0a' : 'transparent',
+              color: active ? '#EAB308' : '#9ca3af',
+              borderLeft: active ? '3px solid #EAB308' : '3px solid transparent',
+              transition: 'all 0.15s',
+            }}>
+              <span style={{ fontSize: 15, width: 20, textAlign: 'center' }}>{item.icon}</span>
               {item.label}
             </Link>
           )
         })}
       </nav>
 
-      <div className="px-3 pb-5">
-        <button
-          onClick={handleSignOut}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm hover:bg-white/10 transition-colors"
-        >
-          <span>↩</span> Sign out
-        </button>
+      {/* Bottom: user + sign out */}
+      <div style={{ padding: '12px 10px', borderTop: '1px solid #1f1f1f' }}>
+        {userName && (
+          <div style={{ padding: '8px 12px', marginBottom: 4 }}>
+            <div style={{ fontSize: 12, color: '#6b7280' }}>Signed in as</div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: '#d1d5db', marginTop: 2 }}>{userName}</div>
+          </div>
+        )}
+        <form action={signOut}>
+          <button type="submit" style={{
+            width: '100%', display: 'flex', alignItems: 'center', gap: 10,
+            padding: '9px 12px', borderRadius: 10, background: 'transparent',
+            border: 'none', cursor: 'pointer', fontSize: 13, color: '#6b7280',
+            fontWeight: 500,
+          }}>
+            <span style={{ fontSize: 15 }}>↩</span> Sign out
+          </button>
+        </form>
       </div>
     </aside>
   )
