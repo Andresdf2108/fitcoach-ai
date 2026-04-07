@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { UserCheck, Users, DollarSign, Package } from 'lucide-react'
 
 export default async function AdminDashboard() {
   const supabase = await createClient()
@@ -9,29 +10,47 @@ export default async function AdminDashboard() {
   ])
 
   const stats = [
-    { label: 'Total Trainers',  value: trainerCount ?? 0,  color: 'bg-purple-100 text-purple-700' },
-    { label: 'Total Trainees',  value: traineeCount ?? 0,  color: 'bg-blue-100 text-blue-700' },
-    { label: 'MRR',             value: '$0',               color: 'bg-green-100 text-green-700' },
-    { label: 'Active Plans',    value: 0,                  color: 'bg-orange-100 text-orange-700' },
+    { label: 'Total Trainers', value: trainerCount ?? 0, icon: UserCheck,  color: '#8b5cf6' },
+    { label: 'Total Trainees', value: traineeCount ?? 0, icon: Users,       color: '#3b82f6' },
+    { label: 'MRR',            value: '$0',              icon: DollarSign,  color: '#10b981' },
+    { label: 'Active Plans',   value: 0,                 icon: Package,     color: '#f59e0b' },
   ]
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-1">Platform Overview</h1>
-      <p className="text-gray-500 mb-8">FitCoach AI — Admin Dashboard</p>
-
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {stats.map((s) => (
-          <div key={s.label} className={`rounded-xl p-5 ${s.color}`}>
-            <p className="text-sm font-medium opacity-70">{s.label}</p>
-            <p className="text-3xl font-bold mt-1">{s.value}</p>
-          </div>
-        ))}
+    <div style={{ padding: '40px 40px 60px' }}>
+      <div style={{ marginBottom: 36 }}>
+        <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', margin: '0 0 5px', letterSpacing: '-0.03em' }}>Platform Overview</h1>
+        <p style={{ color: '#52525b', fontSize: 14, margin: 0 }}>FitCoach AI — Admin Dashboard</p>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="font-semibold text-gray-900 mb-2">Getting started</h2>
-        <p className="text-gray-500 text-sm">Run the SQL migration in Supabase, then trainers can sign up and start onboarding clients.</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
+        {stats.map(s => {
+          const Icon = s.icon
+          return (
+            <div key={s.label} style={{
+              background: '#161616', border: '1px solid rgba(255,255,255,0.06)',
+              borderRadius: 14, padding: '20px 22px',
+            }}>
+              <div style={{
+                width: 34, height: 34, borderRadius: 9,
+                background: `${s.color}15`, border: `1px solid ${s.color}25`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: 14,
+              }}>
+                <Icon size={16} color={s.color} strokeWidth={2} />
+              </div>
+              <p style={{ fontSize: 28, fontWeight: 800, color: '#fff', margin: '0 0 4px', letterSpacing: '-0.03em' }}>{s.value}</p>
+              <p style={{ fontSize: 12, color: '#52525b', margin: 0, fontWeight: 500 }}>{s.label}</p>
+            </div>
+          )
+        })}
+      </div>
+
+      <div style={{ background: '#161616', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 14, padding: '22px 24px' }}>
+        <h2 style={{ fontSize: 14, fontWeight: 700, color: '#fff', margin: '0 0 8px', letterSpacing: '-0.01em' }}>Getting started</h2>
+        <p style={{ color: '#52525b', fontSize: 13, margin: 0, lineHeight: 1.7 }}>
+          Run the SQL migrations in Supabase, then trainers can sign up and start onboarding clients.
+        </p>
       </div>
     </div>
   )

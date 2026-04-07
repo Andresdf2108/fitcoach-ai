@@ -12,12 +12,12 @@ const SPECIALIZATIONS = [
 
 // ── Trainee steps ─────────────────────────────────────────────
 const GOALS = [
-  { value: 'lose_fat', emoji: '🔥', label: 'Lose Fat' },
-  { value: 'build_muscle', emoji: '💪', label: 'Build Muscle' },
-  { value: 'get_stronger', emoji: '🏋️', label: 'Get Stronger' },
-  { value: 'improve_fitness', emoji: '🏃', label: 'General Fitness' },
-  { value: 'rehab', emoji: '🩹', label: 'Injury Rehab' },
-  { value: 'performance', emoji: '⚡', label: 'Athletic Performance' },
+  { value: 'lose_fat',        label: 'Lose Fat' },
+  { value: 'build_muscle',    label: 'Build Muscle' },
+  { value: 'get_stronger',    label: 'Get Stronger' },
+  { value: 'improve_fitness', label: 'General Fitness' },
+  { value: 'rehab',           label: 'Injury Rehab' },
+  { value: 'performance',     label: 'Athletic Performance' },
 ]
 
 const FITNESS_LEVELS = [
@@ -167,7 +167,7 @@ export default function OnboardingPage() {
             fontWeight: 900, fontSize: 18, color: '#000', marginBottom: 20,
           }}>FC</div>
           <Progress />
-          <h2 style={h2}>Welcome, {firstName}! 👋</h2>
+          <h2 style={h2}>Welcome, {firstName}</h2>
           <p style={sub}>
             {isTrainer
               ? "You're joining FitCoach AI as a Coach. Let's set up your profile in 2 quick steps so you can start bringing in clients."
@@ -178,8 +178,8 @@ export default function OnboardingPage() {
         <div style={{ background: '#fefce8', border: '1px solid #fef08a', borderRadius: 14, padding: '16px 20px', marginBottom: 28 }}>
           <p style={{ fontSize: 14, color: '#713f12', margin: 0, lineHeight: 1.6 }}>
             {isTrainer
-              ? '🏋️ Your free plan includes up to 5 active clients. Upgrade anytime as you grow.'
-              : '💪 Your trainer will assign your first workout plan after reviewing your profile.'}
+              ? 'Your free plan includes up to 5 active clients. Upgrade anytime as you grow.'
+              : 'Your trainer will assign your first workout plan after reviewing your profile.'}
           </p>
         </div>
 
@@ -248,14 +248,13 @@ export default function OnboardingPage() {
                   <button
                     key={g.value} type="button" onClick={() => setGoal(g.value)}
                     style={{
-                      padding: '14px', borderRadius: 12, textAlign: 'left',
-                      border: `2px solid ${goal === g.value ? '#EAB308' : '#e5e7eb'}`,
+                      padding: '14px 16px', borderRadius: 12, textAlign: 'left',
+                      border: `1.5px solid ${goal === g.value ? '#EAB308' : '#e5e7eb'}`,
                       background: goal === g.value ? '#fefce8' : '#fafafa',
                       cursor: 'pointer',
                     }}
                   >
-                    <span style={{ fontSize: 22 }}>{g.emoji}</span>
-                    <p style={{ fontSize: 13, fontWeight: 700, color: '#111827', margin: '6px 0 0' }}>{g.label}</p>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: '#111827', margin: 0 }}>{g.label}</p>
                   </button>
                 ))}
               </div>
@@ -313,7 +312,17 @@ export default function OnboardingPage() {
         {isTrainer ? (
           <>
             <div style={{ textAlign: 'center', marginBottom: 32 }}>
-              <div style={{ fontSize: 64, marginBottom: 16 }}>🎉</div>
+              <div style={{
+                width: 52, height: 52, borderRadius: 14,
+                background: 'linear-gradient(135deg, #EAB308, #a16207)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 16px',
+                boxShadow: '0 0 20px rgba(234,179,8,0.3)',
+              }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
               <h2 style={{ ...h2, textAlign: 'center' }}>You&apos;re all set!</h2>
               <p style={{ ...sub, textAlign: 'center' }}>
                 Your coaching profile is ready. Start by adding your first lead or inviting a client.
@@ -323,12 +332,15 @@ export default function OnboardingPage() {
             <div style={{ background: '#f9fafb', borderRadius: 14, padding: '20px 24px', marginBottom: 28 }}>
               <p style={{ fontSize: 13, fontWeight: 700, color: '#374151', margin: '0 0 12px' }}>What you can do next:</p>
               {[
-                '➕ Add your first lead to the CRM',
-                '📋 Build a program template',
-                '💬 Message a client',
-                '📊 Check your dashboard stats',
+                'Add your first lead to the CRM',
+                'Build a program template',
+                'Message a client',
+                'Check your dashboard stats',
               ].map((item) => (
-                <p key={item} style={{ fontSize: 13, color: '#6b7280', margin: '6px 0', lineHeight: 1.5 }}>{item}</p>
+                <p key={item} style={{ fontSize: 13, color: '#6b7280', margin: '6px 0', lineHeight: 1.5, paddingLeft: 16, position: 'relative' }}>
+                  <span style={{ position: 'absolute', left: 0, color: '#EAB308' }}>›</span>
+                  {item}
+                </p>
               ))}
             </div>
           </>
@@ -352,7 +364,7 @@ export default function OnboardingPage() {
 
             <div style={{ background: '#fefce8', border: '1px solid #fef08a', borderRadius: 14, padding: '16px 20px', marginBottom: 24 }}>
               <p style={{ fontSize: 13, color: '#713f12', margin: 0, lineHeight: 1.6 }}>
-                💡 Your trainer will review this before assigning your first program.
+                Your trainer will review this before assigning your first program.
               </p>
             </div>
           </>
