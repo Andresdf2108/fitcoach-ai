@@ -1,12 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -16,10 +14,15 @@ export default function LoginPage() {
     e.preventDefault()
     setError('')
     setLoading(true)
-    const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) { setError(error.message); setLoading(false); return }
-    router.push('/auth/redirect')
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) { setError(error.message); setLoading(false); return }
+      window.location.href = '/auth/redirect'
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+      setLoading(false)
+    }
   }
 
   const inputStyle = {
@@ -27,8 +30,7 @@ export default function LoginPage() {
     padding: '0 14px', fontSize: 15,
     border: '1.5px solid #e5e7eb', borderRadius: 12,
     background: '#fafafa', color: '#111827',
-    outline: 'none', boxSizing: 'border-box' as const,
-    marginTop: 6,
+    outline: 'none', boxSizing: 'border-box' as const, marginTop: 6,
   }
 
   return (
@@ -45,9 +47,7 @@ export default function LoginPage() {
         )}
 
         <div style={{ marginBottom: 18 }}>
-          <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#374151' }}>
-            Email
-          </label>
+          <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#374151' }}>Email</label>
           <input
             type="email" placeholder="you@example.com" required
             value={email} onChange={(e) => setEmail(e.target.value)}
@@ -56,9 +56,7 @@ export default function LoginPage() {
         </div>
 
         <div style={{ marginBottom: 24 }}>
-          <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#374151' }}>
-            Password
-          </label>
+          <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#374151' }}>Password</label>
           <input
             type="password" placeholder="••••••••" required
             value={password} onChange={(e) => setPassword(e.target.value)}

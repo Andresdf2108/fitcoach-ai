@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
@@ -11,7 +10,6 @@ const ROLES = [
 ]
 
 export default function SignupPage() {
-  const router = useRouter()
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -23,16 +21,21 @@ export default function SignupPage() {
     e.preventDefault()
     setError('')
     setLoading(true)
-    const supabase = createClient()
-    const { error } = await supabase.auth.signUp({
-      email, password,
-      options: {
-        data: { full_name: fullName, role },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    })
-    if (error) { setError(error.message); setLoading(false); return }
-    router.push('/auth/redirect')
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: fullName, role },
+        },
+      })
+      if (error) { setError(error.message); setLoading(false); return }
+      window.location.href = '/auth/redirect'
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+      setLoading(false)
+    }
   }
 
   const inputStyle = {
@@ -40,8 +43,7 @@ export default function SignupPage() {
     padding: '0 14px', fontSize: 15,
     border: '1.5px solid #e5e7eb', borderRadius: 12,
     background: '#fafafa', color: '#111827',
-    outline: 'none', boxSizing: 'border-box' as const,
-    marginTop: 6,
+    outline: 'none', boxSizing: 'border-box' as const, marginTop: 6,
   }
 
   return (
@@ -59,7 +61,7 @@ export default function SignupPage() {
 
         {/* Role selector */}
         <div style={{ marginBottom: 20 }}>
-          <p style={{ fontSize: 14, fontWeight: 600, color: '#374151', marginBottom: 10 }}>I am a…</p>
+          <p style={{ fontSize: 14, fontWeight: 600, color: '#374151', margin: '0 0 10px' }}>I am a…</p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             {ROLES.map((r) => (
               <button
