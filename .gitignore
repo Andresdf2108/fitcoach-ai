@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local one-off scripts (may contain secrets)
+fix-*.mjs
+run-migrations.mjs

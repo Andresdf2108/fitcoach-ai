@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { Target, Users, ClipboardCheck, MessageCircle, TrendingUp, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import TrainerBriefing from '@/components/trainer-briefing'
 
 export default async function TrainerDashboard() {
   const supabase = await createClient()
@@ -14,6 +15,28 @@ export default async function TrainerDashboard() {
       supabase.from('trainees').select('*', { count: 'exact', head: true }).eq('trainer_id', user!.id),
     ])
 
+  // Graceful fallback if migrations 003/004 haven't been run yet
+  let pendingCheckins = 0
+  let unreadMessages = 0
+  try {
+    const [{ count: ciCount }, { count: msgCount }] = await Promise.all([
+      supabase
+        .from('checkins')
+        .select('*', { count: 'exact', head: true })
+        .eq('trainer_id', user!.id)
+        .eq('reviewed', false),
+      supabase
+        .from('messages')
+        .select('*', { count: 'exact', head: true })
+        .eq('recipient_id', user!.id)
+        .eq('read', false),
+    ])
+    pendingCheckins = ciCount ?? 0
+    unreadMessages = msgCount ?? 0
+  } catch {
+    // Tables don't exist yet
+  }
+
   const plan = (trainer as any)?.subscription_plans
   const activeCount = (trainer as any)?.active_trainee_count ?? 0
   const maxCount = plan?.max_trainees ?? 5
@@ -23,8 +46,8 @@ export default async function TrainerDashboard() {
   const stats = [
     { label: 'Active Leads',      value: leadCount ?? 0,   icon: Target,         href: '/trainer/leads',    color: '#3b82f6' },
     { label: 'Active Clients',    value: clientCount ?? 0, icon: Users,          href: '/trainer/clients',  color: '#10b981' },
-    { label: 'Pending Check-ins', value: 0,                icon: ClipboardCheck, href: '/trainer/checkins', color: '#f59e0b' },
-    { label: 'Unread Messages',   value: 0,                icon: MessageCircle,  href: '/trainer/messages', color: '#8b5cf6' },
+    { label: 'Pending Check-ins', value: pendingCheckins,  icon: ClipboardCheck, href: '/trainer/checkins', color: '#f59e0b' },
+    { label: 'Unread Messages',   value: unreadMessages,   icon: MessageCircle,  href: '/trainer/messages', color: '#8b5cf6' },
   ]
 
   const quickLinks = [
@@ -36,6 +59,13 @@ export default async function TrainerDashboard() {
 
   return (
     <div style={{ padding: '40px 40px 60px' }}>
+      <TrainerBriefing
+        firstName={firstName}
+        pendingCheckins={pendingCheckins}
+        unreadMessages={unreadMessages}
+        leadCount={leadCount ?? 0}
+        clientCount={clientCount ?? 0}
+      />
       {/* Header */}
       <div style={{ marginBottom: 36 }}>
         <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', margin: '0 0 5px', letterSpacing: '-0.03em' }}>

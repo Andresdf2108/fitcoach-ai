@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { Dumbbell, Flame, ClipboardCheck, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
+import TraineeBriefing from '@/components/trainee-briefing'
 
 export default async function TraineeDashboard() {
   const supabase = await createClient()
@@ -11,15 +12,54 @@ export default async function TraineeDashboard() {
 
   const firstName = profile?.full_name?.split(' ')[0] ?? 'Athlete'
 
+  // Graceful fallbacks if tables don't exist yet
+  let streak = 0
+  let pendingCheckin = false
+  let unreadMessages = 0
+  let hasWorkoutToday = false
+  let workoutName = ''
+
+  try {
+    const today = new Date().toISOString().split('T')[0]
+    const startOfWeek = new Date()
+    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay())
+    const weekStart = startOfWeek.toISOString().split('T')[0]
+
+    const [{ data: traineeData }, { count: msgCount }, { data: todayWorkout }, { count: pendingCount }] =
+      await Promise.all([
+        supabase.from('trainees').select('streak').eq('id', user!.id).single(),
+        supabase.from('messages').select('*', { count: 'exact', head: true }).eq('recipient_id', user!.id).eq('read', false),
+        supabase.from('workout_assignments').select('name').eq('trainee_id', user!.id).eq('scheduled_date', today).maybeSingle(),
+        supabase.from('checkins').select('*', { count: 'exact', head: true }).eq('trainee_id', user!.id).gte('created_at', weekStart).eq('reviewed', false),
+      ])
+
+    streak = traineeData?.streak ?? 0
+    unreadMessages = msgCount ?? 0
+    hasWorkoutToday = !!todayWorkout
+    workoutName = todayWorkout?.name ?? ''
+    pendingCheckin = (pendingCount ?? 0) === 0
+  } catch {
+    // Tables don't exist yet — use defaults
+  }
+
   const cards = [
-    { label: "Today's Workout",  value: 'Not assigned yet', icon: Dumbbell,       href: '/trainee/workouts',  color: '#FACC15' },
-    { label: 'Current Streak',   value: '0 days',           icon: Flame,          href: '/trainee/progress',  color: '#f59e0b' },
-    { label: 'Pending Check-in', value: 'None due',         icon: ClipboardCheck, href: '/trainee/checkins',  color: '#10b981' },
-    { label: 'New Messages',     value: '0',                icon: MessageCircle,  href: '/trainee/messages',  color: '#8b5cf6' },
+    { label: "Today's Workout",  value: hasWorkoutToday ? workoutName : 'Not assigned yet', icon: Dumbbell,       href: '/trainee/workouts',  color: '#FACC15' },
+    { label: 'Current Streak',   value: streak > 0 ? `${streak} day${streak !== 1 ? 's' : ''}` : '0 days', icon: Flame, href: '/trainee/progress', color: '#f59e0b' },
+    { label: 'Pending Check-in', value: pendingCheckin ? 'Due this week' : 'None due', icon: ClipboardCheck, href: '/trainee/checkins', color: '#10b981' },
+    { label: 'New Messages',     value: String(unreadMessages), icon: MessageCircle, href: '/trainee/messages', color: '#8b5cf6' },
   ]
 
   return (
     <div style={{ padding: '40px 40px 60px' }}>
+      <TraineeBriefing
+        firstName={firstName}
+        streak={streak}
+        pendingCheckin={pendingCheckin}
+        unreadMessages={unreadMessages}
+        hasWorkoutToday={hasWorkoutToday}
+        workoutName={workoutName}
+      />
+
       {/* Header */}
       <div style={{ marginBottom: 36 }}>
         <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', margin: '0 0 5px', letterSpacing: '-0.03em' }}>

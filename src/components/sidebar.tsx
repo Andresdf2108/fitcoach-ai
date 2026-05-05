@@ -8,7 +8,7 @@ import {
   LayoutDashboard, Target, Users, BookOpen,
   ClipboardCheck, MessageCircle, CalendarDays,
   CreditCard, BarChart3, Sparkles, Settings2,
-  Home, Dumbbell, TrendingUp,
+  Home, Dumbbell, TrendingUp, Utensils,
   UserCheck, DollarSign, Package, LineChart,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -27,7 +27,6 @@ const TRAINER_NAV: NavItem[] = [
   { label: 'Check-ins',    href: '/trainer/checkins',   icon: ClipboardCheck },
   { label: 'Messages',     href: '/trainer/messages',   icon: MessageCircle },
   { label: 'Calendar',     href: '/trainer/calendar',   icon: CalendarDays },
-  { label: 'Billing',      href: '/trainer/billing',    icon: CreditCard },
   { label: 'Reports',      href: '/trainer/reports',    icon: BarChart3 },
   { label: 'AI Assistant', href: '/trainer/ai',         icon: Sparkles },
   { label: 'Settings',     href: '/trainer/settings',   icon: Settings2 },
@@ -39,6 +38,7 @@ const TRAINEE_NAV: NavItem[] = [
   { label: 'Progress',   href: '/trainee/progress',  icon: TrendingUp },
   { label: 'Check-ins',  href: '/trainee/checkins',  icon: ClipboardCheck },
   { label: 'Messages',   href: '/trainee/messages',  icon: MessageCircle },
+  { label: 'Nutrition',  href: '/trainee/nutrition', icon: Utensils },
   { label: 'Sessions',   href: '/trainee/sessions',  icon: CalendarDays },
   { label: 'Billing',    href: '/trainee/billing',   icon: CreditCard },
 ]
@@ -110,7 +110,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
                 padding: '7px 10px', borderRadius: 7, textDecoration: 'none',
                 fontSize: 13,
                 fontWeight: active ? 600 : 400,
-                color: active ? '#FACC15' : '#52525b',
+                color: active ? '#FACC15' : '#a1a1aa',
                 background: active ? 'rgba(250,204,21,0.07)' : 'transparent',
               }}
             >
@@ -147,7 +147,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
           <button type="submit" style={{
             width: '100%', display: 'flex', alignItems: 'center', gap: 9,
             padding: '7px 10px', borderRadius: 7, background: 'transparent',
-            border: 'none', cursor: 'pointer', fontSize: 13, color: '#3f3f46', fontWeight: 400,
+            border: 'none', cursor: 'pointer', fontSize: 13, color: '#71717a', fontWeight: 400,
           }}>
             <LogOut size={13} strokeWidth={1.8} />
             Sign out

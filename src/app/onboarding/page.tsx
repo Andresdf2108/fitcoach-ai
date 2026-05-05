@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { createAccount } from '@/app/actions/auth'
 
 // ── Trainer steps ─────────────────────────────────────────────
 const SPECIALIZATIONS = [
@@ -21,9 +22,9 @@ const GOALS = [
 ]
 
 const FITNESS_LEVELS = [
-  { value: 'beginner', label: 'Beginner', desc: 'Less than 1 year of training' },
+  { value: 'beginner',     label: 'Beginner',     desc: 'Less than 1 year of training' },
   { value: 'intermediate', label: 'Intermediate', desc: '1–3 years of training' },
-  { value: 'advanced', label: 'Advanced', desc: '3+ years of training' },
+  { value: 'advanced',     label: 'Advanced',     desc: '3+ years of training' },
 ]
 
 type Profile = { id: string; role: string; full_name: string }
@@ -32,8 +33,18 @@ export default function OnboardingPage() {
   const router = useRouter()
   const [profile, setProfile] = useState<Profile | null>(null)
   const [step, setStep] = useState(1)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+
+  // New-user signup state
+  const [isNewUser, setIsNewUser] = useState(false)
+  const [signupEmail, setSignupEmail] = useState('')
+  const [signupPassword, setSignupPassword] = useState('')
+  const [signupRole, setSignupRole] = useState<'trainer' | 'trainee'>('trainee')
+  const [signupError, setSignupError] = useState('')
+
+  // Name step
+  const [fullName, setFullName] = useState('')
 
   // Trainer fields
   const [bio, setBio] = useState('')
@@ -44,12 +55,34 @@ export default function OnboardingPage() {
   const [fitnessLevel, setFitnessLevel] = useState('')
   const [injuries, setInjuries] = useState('')
 
+  const loadProfile = useCallback(async () => {
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return
+    let prof = null
+    for (let i = 0; i < 8; i++) {
+      const { data } = await supabase
+        .from('profiles')
+        .select('id, role, full_name')
+        .eq('id', user.id)
+        .single()
+      if (data) { prof = data; break }
+      await new Promise((r) => setTimeout(r, 600))
+    }
+    if (prof) setProfile(prof)
+  }, [])
+
   useEffect(() => {
     async function load() {
       setLoading(true)
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/login'); return }
+
+      if (!user) {
+        setIsNewUser(true)
+        setLoading(false)
+        return
+      }
 
       // Poll briefly for profile (trigger may not have fired yet)
       let prof = null
@@ -63,6 +96,7 @@ export default function OnboardingPage() {
         await new Promise((r) => setTimeout(r, 600))
       }
       setProfile(prof)
+      setFullName('')
       setLoading(false)
     }
     load()
@@ -72,6 +106,52 @@ export default function OnboardingPage() {
     setSpecializations((prev) =>
       prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]
     )
+  }
+
+  async function handleSignup() {
+    if (!fullName.trim() || !signupEmail.trim() || signupPassword.length < 6) return
+    setSaving(true)
+    setSignupError('')
+
+    const fd = new FormData()
+    fd.set('email', signupEmail.trim())
+    fd.set('password', signupPassword)
+    fd.set('fullName', fullName.trim())
+    fd.set('role', signupRole)
+
+    const result = await createAccount(fd)
+    if (result.error) {
+      setSignupError(result.error)
+      setSaving(false)
+      return
+    }
+
+    // Sign in client-side (email is confirmed via admin API)
+    const supabase = createClient()
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: signupEmail.trim(),
+      password: signupPassword,
+    })
+
+    if (signInError) {
+      setSignupError(signInError.message)
+      setSaving(false)
+      return
+    }
+
+    // Wait for DB trigger to create profile
+    await loadProfile()
+    setSaving(false)
+    setIsNewUser(false)
+    setStep(2)
+  }
+
+  async function saveName() {
+    if (!profile || !fullName.trim()) return
+    const supabase = createClient()
+    await supabase.from('profiles').update({ full_name: fullName.trim() }).eq('id', profile.id)
+    setProfile({ ...profile, full_name: fullName.trim() })
+    setStep(2)
   }
 
   async function finish() {
@@ -84,7 +164,7 @@ export default function OnboardingPage() {
     } else {
       await supabase.from('trainees').upsert({
         id: profile.id,
-        primary_goal: goal,
+        goals: goal,
         fitness_level: fitnessLevel,
         injury_notes: injuries,
       })
@@ -96,7 +176,7 @@ export default function OnboardingPage() {
   }
 
   // ── Loading state ─────────────────────────────────────────
-  if (loading || !profile) {
+  if (loading) {
     return (
       <div style={{
         minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -114,9 +194,9 @@ export default function OnboardingPage() {
     )
   }
 
-  const isTrainer = profile.role === 'trainer'
-  const firstName = profile.full_name?.split(' ')[0] ?? 'there'
-  const totalSteps = 3
+  const isTrainer = profile?.role === 'trainer' || signupRole === 'trainer'
+  const firstName = (fullName || profile?.full_name)?.split(' ')[0] ?? 'there'
+  const totalSteps = 4
 
   // ── Step progress bar ─────────────────────────────────────
   const Progress = () => (
@@ -153,11 +233,146 @@ export default function OnboardingPage() {
     border: '1.5px solid #e5e7eb', borderRadius: 12, background: '#fafafa',
     color: '#111827', outline: 'none', boxSizing: 'border-box' as const, marginTop: 6,
   }
+  const labelStyle = { fontSize: 14, fontWeight: 600, color: '#374151' }
 
   // ══════════════════════════════════════════════════════════
-  // STEP 1 — Welcome
+  // STEP 1 — Signup (new user) or Name update (existing user)
   // ══════════════════════════════════════════════════════════
-  if (step === 1) return (
+  if (step === 1) {
+    if (isNewUser) return (
+      <div style={card}>
+        <div style={inner}>
+          <div style={{
+            width: 52, height: 52, borderRadius: 14, background: '#FACC15',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontWeight: 900, fontSize: 18, color: '#000', marginBottom: 20,
+          }}>FC</div>
+          <Progress />
+          <h2 style={h2}>Create your free account</h2>
+          <p style={sub}>Get started with FitCoach AI — no credit card required.</p>
+
+          {/* Role selector */}
+          <div style={{ marginBottom: 20 }}>
+            <label style={labelStyle}>I am a…</label>
+            <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
+              {(['trainee', 'trainer'] as const).map((r) => (
+                <button
+                  key={r} type="button"
+                  onClick={() => setSignupRole(r)}
+                  style={{
+                    flex: 1, padding: '12px 16px', borderRadius: 12, fontSize: 14, fontWeight: 700,
+                    border: `2px solid ${signupRole === r ? '#FACC15' : '#e5e7eb'}`,
+                    background: signupRole === r ? '#fefce8' : '#fafafa',
+                    color: signupRole === r ? '#713f12' : '#374151',
+                    cursor: 'pointer', textTransform: 'capitalize',
+                  }}
+                >{r === 'trainee' ? 'Trainee / Athlete' : 'Coach / Trainer'}</button>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 16 }}>
+            <label style={labelStyle}>Full name</label>
+            <input
+              type="text"
+              placeholder="e.g. Alex Johnson"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              autoFocus
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={{ marginBottom: 16 }}>
+            <label style={labelStyle}>Email</label>
+            <input
+              type="email"
+              placeholder="you@example.com"
+              value={signupEmail}
+              onChange={(e) => setSignupEmail(e.target.value)}
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={{ marginBottom: 24 }}>
+            <label style={labelStyle}>Password</label>
+            <input
+              type="password"
+              placeholder="At least 6 characters"
+              value={signupPassword}
+              onChange={(e) => setSignupPassword(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') handleSignup() }}
+              style={inputStyle}
+            />
+          </div>
+
+          {signupError && (
+            <p style={{ fontSize: 13, color: '#dc2626', marginBottom: 12, padding: '10px 14px', background: '#fef2f2', borderRadius: 10, border: '1px solid #fecaca' }}>
+              {signupError}
+            </p>
+          )}
+
+          <button
+            style={{
+              ...btnPrimary, width: '100%',
+              opacity: (fullName.trim() && signupEmail.trim() && signupPassword.length >= 6 && !saving) ? 1 : 0.5,
+              cursor: (fullName.trim() && signupEmail.trim() && signupPassword.length >= 6 && !saving) ? 'pointer' : 'not-allowed',
+            }}
+            onClick={handleSignup}
+            disabled={!fullName.trim() || !signupEmail.trim() || signupPassword.length < 6 || saving}
+          >
+            {saving ? 'Creating account…' : 'Create free account →'}
+          </button>
+
+          <p style={{ fontSize: 13, color: '#9ca3af', textAlign: 'center', marginTop: 16 }}>
+            Already have an account?{' '}
+            <a href="/login" style={{ color: '#374151', fontWeight: 600, textDecoration: 'none' }}>Log in</a>
+          </p>
+        </div>
+      </div>
+    )
+
+    return (
+      <div style={card}>
+        <div style={inner}>
+          <div style={{
+            width: 52, height: 52, borderRadius: 14, background: '#FACC15',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontWeight: 900, fontSize: 18, color: '#000', marginBottom: 20,
+          }}>FC</div>
+          <Progress />
+          <h2 style={h2}>What&apos;s your name?</h2>
+          <p style={sub}>This is how you&apos;ll appear to {isTrainer ? 'your clients' : 'your trainer'} on FitCoach AI.</p>
+
+          <div style={{ marginBottom: 28 }}>
+            <label style={{ fontSize: 14, fontWeight: 600, color: '#374151' }}>Full name</label>
+            <input
+              type="text"
+              placeholder="e.g. Alex Johnson"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter' && fullName.trim()) saveName() }}
+              autoFocus
+              style={inputStyle}
+            />
+          </div>
+
+          <button
+            style={{ ...btnPrimary, width: '100%', opacity: fullName.trim() ? 1 : 0.5, cursor: fullName.trim() ? 'pointer' : 'not-allowed' }}
+            onClick={saveName}
+            disabled={!fullName.trim()}
+          >
+            Continue →
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // STEP 2 — Welcome
+  // ══════════════════════════════════════════════════════════
+  if (step === 2) return (
     <div style={card}>
       <div style={inner}>
         <div style={{ marginBottom: 28 }}>
@@ -167,7 +382,7 @@ export default function OnboardingPage() {
             fontWeight: 900, fontSize: 18, color: '#000', marginBottom: 20,
           }}>FC</div>
           <Progress />
-          <h2 style={h2}>Welcome, {firstName}</h2>
+          <h2 style={h2}>Welcome, {firstName}! 👋</h2>
           <p style={sub}>
             {isTrainer
               ? "You're joining FitCoach AI as a Coach. Let's set up your profile in 2 quick steps so you can start bringing in clients."
@@ -183,17 +398,20 @@ export default function OnboardingPage() {
           </p>
         </div>
 
-        <button style={{ ...btnPrimary, width: '100%' }} onClick={() => setStep(2)}>
-          Let&apos;s go →
-        </button>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button style={btnSecondary} onClick={() => setStep(1)}>← Back</button>
+          <button style={{ ...btnPrimary, flex: 1 }} onClick={() => setStep(3)}>
+            Let&apos;s go →
+          </button>
+        </div>
       </div>
     </div>
   )
 
   // ══════════════════════════════════════════════════════════
-  // STEP 2 — Role-specific setup
+  // STEP 3 — Role-specific setup
   // ══════════════════════════════════════════════════════════
-  if (step === 2) return (
+  if (step === 3) return (
     <div style={card}>
       <div style={inner}>
         <Progress />
@@ -288,10 +506,10 @@ export default function OnboardingPage() {
         )}
 
         <div style={{ display: 'flex', gap: 10, marginTop: 28 }}>
-          <button style={btnSecondary} onClick={() => setStep(1)}>← Back</button>
+          <button style={btnSecondary} onClick={() => setStep(2)}>← Back</button>
           <button
             style={{ ...btnPrimary, flex: 1 }}
-            onClick={() => setStep(3)}
+            onClick={() => setStep(4)}
             disabled={isTrainer ? false : (!goal || !fitnessLevel)}
           >
             Continue →
@@ -302,7 +520,7 @@ export default function OnboardingPage() {
   )
 
   // ══════════════════════════════════════════════════════════
-  // STEP 3 — Injuries (trainee) / Done (trainer)
+  // STEP 4 — Injuries (trainee) / Done (trainer)
   // ══════════════════════════════════════════════════════════
   return (
     <div style={card}>
@@ -371,7 +589,7 @@ export default function OnboardingPage() {
         )}
 
         <div style={{ display: 'flex', gap: 10 }}>
-          <button style={btnSecondary} onClick={() => setStep(2)}>← Back</button>
+          <button style={btnSecondary} onClick={() => setStep(3)}>← Back</button>
           <button
             style={{ ...btnPrimary, flex: 1, opacity: saving ? 0.6 : 1, cursor: saving ? 'not-allowed' : 'pointer' }}
             onClick={finish}
