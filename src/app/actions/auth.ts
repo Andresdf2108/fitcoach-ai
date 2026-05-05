@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 
 export async function createAccount(formData: FormData): Promise<{ error?: string }> {
   const email = formData.get('email') as string
@@ -68,4 +69,37 @@ export async function signOut() {
   const supabase = await createClient()
   await supabase.auth.signOut()
   redirect('/login')
+}
+
+export async function requestPasswordReset(formData: FormData) {
+  const supabase = await createClient()
+  const email = formData.get('email') as string
+
+  const h = await headers()
+  const origin = h.get('origin') ?? `https://${h.get('host')}`
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${origin}/auth/callback?next=/reset`,
+  })
+
+  if (error) {
+    redirect(`/forgot-password?error=${encodeURIComponent(error.message)}`)
+  }
+  redirect(`/forgot-password?sent=${encodeURIComponent(email)}`)
+}
+
+export async function updatePassword(formData: FormData) {
+  const supabase = await createClient()
+  const password = formData.get('password') as string
+
+  if (!password || password.length < 8) {
+    redirect(`/reset?error=${encodeURIComponent('Password must be at least 8 characters')}`)
+  }
+
+  const { error } = await supabase.auth.updateUser({ password })
+
+  if (error) {
+    redirect(`/reset?error=${encodeURIComponent(error.message)}`)
+  }
+  redirect('/auth/redirect')
 }

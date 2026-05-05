@@ -5,10 +5,16 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
   const inviteToken = searchParams.get('invite_token')
+  const next = searchParams.get('next')
 
   if (code) {
     const supabase = await createClient()
     await supabase.auth.exchangeCodeForSession(code)
+
+    // Honor ?next= for flows like password recovery (next=/auth/reset)
+    if (next && next.startsWith('/')) {
+      return NextResponse.redirect(`${origin}${next}`)
+    }
 
     if (inviteToken) {
       const { data: invite } = await supabase

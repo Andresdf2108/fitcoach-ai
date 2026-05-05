@@ -35,7 +35,12 @@ export default async function LoginPage({
         </div>
 
         <div style={{ marginBottom: 22 }}>
-          <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151' }}>Password</label>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+            <label style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>Password</label>
+            <Link href="/forgot-password" style={{ fontSize: 12, color: '#6b7280', textDecoration: 'none', fontWeight: 500 }}>
+              Forgot?
+            </Link>
+          </div>
           <input name="password" type="password" placeholder="••••••••" required style={inputStyle} />
         </div>
 
