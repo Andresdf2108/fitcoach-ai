@@ -10,6 +10,7 @@ import {
   CreditCard, BarChart3, Sparkles, Settings2,
   Home, Dumbbell, TrendingUp, Utensils,
   UserCheck, DollarSign, Package, LineChart,
+  Brain, Video,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
@@ -24,9 +25,11 @@ const TRAINER_NAV: NavItem[] = [
   { label: 'Leads',        href: '/trainer/leads',      icon: Target },
   { label: 'Clients',      href: '/trainer/clients',    icon: Users },
   { label: 'Programs',     href: '/trainer/programs',   icon: BookOpen },
+  { label: 'Videos',       href: '/trainer/videos',     icon: Video },
   { label: 'Check-ins',    href: '/trainer/checkins',   icon: ClipboardCheck },
   { label: 'Messages',     href: '/trainer/messages',   icon: MessageCircle },
   { label: 'Calendar',     href: '/trainer/calendar',   icon: CalendarDays },
+  { label: 'Mindset',      href: '/trainer/mindset',    icon: Brain },
   { label: 'Reports',      href: '/trainer/reports',    icon: BarChart3 },
   { label: 'AI Assistant', href: '/trainer/ai',         icon: Sparkles },
   { label: 'Settings',     href: '/trainer/settings',   icon: Settings2 },
@@ -36,6 +39,7 @@ const TRAINEE_NAV: NavItem[] = [
   { label: 'Home',       href: '/trainee/dashboard', icon: Home },
   { label: 'Workouts',   href: '/trainee/workouts',  icon: Dumbbell },
   { label: 'Progress',   href: '/trainee/progress',  icon: TrendingUp },
+  { label: 'Mindset',    href: '/trainee/mindset',   icon: Brain },
   { label: 'Check-ins',  href: '/trainee/checkins',  icon: ClipboardCheck },
   { label: 'Messages',   href: '/trainee/messages',  icon: MessageCircle },
   { label: 'Nutrition',  href: '/trainee/nutrition', icon: Utensils },

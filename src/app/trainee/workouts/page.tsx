@@ -227,6 +227,16 @@ export default async function TraineeWorkoutsPage() {
                                       {ex.notes}
                                     </p>
                                   )}
+                                  {ex.video_url && (
+                                    <a
+                                      href={ex.video_url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      style={{ display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: 6, fontSize: 11, color: '#FACC15', fontWeight: 600, textDecoration: 'none' }}
+                                    >
+                                      ▶ Watch your coach&apos;s demo
+                                    </a>
+                                  )}
                                 </div>
                               </div>
                             ))}

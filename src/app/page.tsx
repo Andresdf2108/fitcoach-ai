@@ -83,6 +83,9 @@ export default function HomePage() {
             <Link href="/signup" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 15, fontWeight: 800, color: '#000', textDecoration: 'none', padding: '15px 36px', background: '#FACC15', borderRadius: 10, boxShadow: '0 4px 28px rgba(234,179,8,.45)', letterSpacing: '-.02em' }}>
               Start for free — no card needed →
             </Link>
+            <Link href="/free" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 15, fontWeight: 600, color: '#FACC15', textDecoration: 'none', padding: '15px 28px', background: 'rgba(250,204,21,0.08)', borderRadius: 10, border: '1px solid rgba(250,204,21,0.25)' }}>
+              ✨ Try the free mindset check-in
+            </Link>
             <Link href="/coaches" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 15, fontWeight: 600, color: '#a3a3a3', textDecoration: 'none', padding: '15px 28px', background: 'rgba(255,255,255,.04)', borderRadius: 10, border: '1px solid rgba(255,255,255,.08)' }}>
               See how it works
             </Link>

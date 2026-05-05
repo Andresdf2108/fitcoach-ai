@@ -7,12 +7,13 @@ export default async function TrainerDashboard() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const [{ data: profile }, { data: trainer }, { count: leadCount }, { count: clientCount }] =
+  const [{ data: profile }, { data: trainer }, { count: leadCount }, { count: clientCount }, { count: programCount }] =
     await Promise.all([
       supabase.from('profiles').select('full_name').eq('id', user!.id).single(),
       supabase.from('trainers').select('active_trainee_count, plan_id, subscription_plans(name, max_trainees)').eq('id', user!.id).single(),
       supabase.from('leads').select('*', { count: 'exact', head: true }).eq('trainer_id', user!.id),
       supabase.from('trainees').select('*', { count: 'exact', head: true }).eq('trainer_id', user!.id),
+      supabase.from('programs').select('*', { count: 'exact', head: true }).eq('trainer_id', user!.id),
     ])
 
   // Graceful fallback if migrations 003/004 haven't been run yet
@@ -73,6 +74,29 @@ export default async function TrainerDashboard() {
         </h1>
         <p style={{ color: '#52525b', fontSize: 14, margin: 0 }}>Here&apos;s your coaching overview.</p>
       </div>
+
+      {/* New-coach nudge: surface the template library before they build from scratch */}
+      {(programCount ?? 0) === 0 && (
+        <Link
+          href="/trainer/programs"
+          style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16,
+            padding: '18px 22px', marginBottom: 20,
+            background: 'linear-gradient(135deg, rgba(250,204,21,0.1) 0%, rgba(250,204,21,0.02) 100%)',
+            border: '1px solid rgba(250,204,21,0.3)', borderRadius: 14,
+            textDecoration: 'none',
+          }}
+        >
+          <div>
+            <p style={{ fontSize: 11, color: '#FACC15', fontWeight: 700, letterSpacing: '0.06em', margin: '0 0 4px' }}>NEW HERE? START IN MINUTES</p>
+            <p style={{ fontSize: 15, color: '#fafafa', fontWeight: 600, margin: '0 0 4px' }}>Copy a starter program template</p>
+            <p style={{ fontSize: 13, color: '#a1a1aa', margin: 0, lineHeight: 1.5 }}>24 ready-built programs across strength, weight loss, mobility, performance — clone, customize, assign.</p>
+          </div>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 16px', background: '#FACC15', color: '#000', borderRadius: 9, fontSize: 13, fontWeight: 700, whiteSpace: 'nowrap' }}>
+            Browse templates <ArrowRight size={14} strokeWidth={2.4} />
+          </span>
+        </Link>
+      )}
 
       {/* Stats grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>

@@ -381,3 +381,43 @@ export async function updateProfile(formData: FormData) {
   revalidatePath('/trainer/settings')
   revalidatePath('/trainer/dashboard')
 }
+
+// ── Exercise videos ──────────────────────────────────────────
+
+export async function setExerciseVideo(exerciseId: string, videoUrl: string | null) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+
+  // RLS on program_exercises restricts updates to the trainer's own programs
+  await supabase.from('program_exercises').update({
+    video_url: videoUrl,
+    video_uploaded_at: videoUrl ? new Date().toISOString() : null,
+  }).eq('id', exerciseId)
+
+  revalidatePath('/trainer/videos')
+}
+
+// Apply a video URL to every program_exercise (across this trainer's programs)
+// that shares the given exercise name. A single "Squat" upload then shows up
+// everywhere the trainer has programmed a Squat.
+export async function setExerciseVideoByName(exerciseName: string, videoUrl: string | null) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+
+  const { data: programs } = await supabase
+    .from('programs')
+    .select('id')
+    .eq('trainer_id', user.id)
+
+  const programIds = (programs ?? []).map(p => p.id)
+  if (programIds.length === 0) return
+
+  await supabase.from('program_exercises').update({
+    video_url: videoUrl,
+    video_uploaded_at: videoUrl ? new Date().toISOString() : null,
+  }).in('program_id', programIds).eq('name', exerciseName)
+
+  revalidatePath('/trainer/videos')
+}
