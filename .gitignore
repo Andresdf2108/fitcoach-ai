@@ -43,3 +43,7 @@ next-env.d.ts
 # local one-off scripts (may contain secrets)
 fix-*.mjs
 run-migrations.mjs
+
+# Quarantined infected files (kept locally for forensics, never commit)
+*.INFECTED-BACKUP
+*.QUARANTINED
