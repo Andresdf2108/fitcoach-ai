@@ -1,5 +1,25 @@
 # 🚨 SECURITY ACTIONS — DO THESE FIRST
 
+## ⚠️ ACTIVE ATTACK CONFIRMED (2026-05-13)
+
+The remote `main` got re-infected with the **same exact obfuscated worm payload** after I'd cleaned it. The infected file (`postcss.config.mjs`) returned, my `.gitignore` change was reverted. The leaked GitHub token is **still valid** — the attacker has automated re-injection.
+
+**Worse:** every Vercel deploy since the re-infection ran the malware in your build environment, which has access to your **Supabase service-role key and Anthropic API key as env vars**. Those keys should be considered compromised — rotate them today.
+
+### Stop the bleeding (5 minutes):
+
+1. **Pause Vercel auto-deploys NOW**: Vercel Dashboard → fitcoach-ai → Settings → Git → **Disable "Auto Deploy"** until the token is revoked. Otherwise the next re-infection triggers another malicious build.
+2. **Revoke the GitHub token**: https://github.com/settings/tokens (revoke ALL active tokens, not just the obvious one).
+3. **Rotate Supabase service-role + anon keys**: Supabase Dashboard → Project Settings → API → reset both.
+4. **Rotate Anthropic API key**: https://console.anthropic.com → Settings → API Keys.
+5. Re-enable Vercel auto-deploys after the next clean push.
+
+Once the token is gone, the attacker loses access and the rest of this doc is cleanup.
+
+---
+
+
+
 Generated 2026-05-05 during the FitCoach session. Three of your projects had npm-supply-chain malware embedded in `postcss.config.mjs`, and your GitHub token was found in plaintext in their `.git/config`.
 
 The malware is **Shai-Hulud-style** (or copycat) — runs every time `next dev` / `next build` starts, has `require()` access via `createRequire`, and executes an obfuscated payload (`Tgw(2509)`). Standard behavior for this family: scrape `.env`, `.git/config`, shell history, AWS / GCP creds, and exfiltrate them; sometimes self-propagate by force-pushing to your repos.
