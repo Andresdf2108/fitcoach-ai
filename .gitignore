@@ -47,3 +47,6 @@ run-migrations.mjs
 # Quarantined infected files (kept locally for forensics, never commit)
 *.INFECTED-BACKUP
 *.QUARANTINED
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
